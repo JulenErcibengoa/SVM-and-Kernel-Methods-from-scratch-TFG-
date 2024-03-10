@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from SGD_soft_SVM import soft_SVM_SGD
 
 
-lim = 10
+lim = 1000
 
 # Listas para almacenar las coordenadas
 coordenadas_x_pos = []
@@ -61,37 +61,57 @@ y_vectors = np.concatenate((np.array([1 for x in coordenadas_x_pos]),np.array([-
 print(x_vectors)
 print(y_vectors)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # ALGORITMOA EXEKUTATU
 w_hat,theta,w,x_berriak,mean,sd = soft_SVM_SGD(x_vectors,y_vectors,10000,1,standardize=True,plot=True,lim = lim)
 b = w[0]
-b2 = w_hat[-1,0]
 
 x = np.linspace(-lim, lim, 100)
 y = -b / w[2] - w[1]/w[2]*x
-#y2 = -b2 / w_hat[-1,2] - w_hat[-1,1]/w_hat[-1,2]*x
 y_originala = mean[1] + sd[1]/w[2] * (-b - w[1]/sd[0]*(x-mean[0]))
 
-plt.plot(x,y)
-plt.scatter(x_berriak[:,1],x_berriak[:,2],c = y_vectors, cmap = "viridis")
-plt.grid()
-plt.title("SVM-leuna SGD algoritmoarekin estandarizatua")
-plt.xlim([-3,3])
-plt.ylim([-3,3])
+
+a,b,w_dis_gabe,k,k,k = soft_SVM_SGD(x_vectors,y_vectors,10000,1,standardize=False)
+b_dis_gabe = w_dis_gabe[0]
+y_dis_gabe = -b_dis_gabe / w_dis_gabe[2] - w_dis_gabe[1]/w_dis_gabe[2]*x
+# grafikoak
+
+fig, axs = plt.subplots(1, 3, figsize=(15, 4))
+axs[0].plot(x,y)
+axs[0].scatter(x_berriak[:,1],x_berriak[:,2],c = y_vectors, cmap = "viridis")
+axs[0].set_title('Algoritmo estandarizatua\nDatu estandarizatuak')
+axs[0].grid()
+axs[0].set_xlim([-3,3])
+axs[0].set_ylim([-3,3])
+
+axs[1].plot(x,y_originala)
+axs[1].scatter(x_vectors[:,0],x_vectors[:,1],c = y_vectors, cmap = "viridis")
+axs[1].set_title('Algoritmo estandarizatua\nDatu originalak')
+axs[1].grid()
+axs[1].set_xlim([-lim,lim])
+axs[1].set_ylim([-lim,lim])
+
+axs[2].plot(x,y_dis_gabe)
+axs[2].scatter(x_vectors[:,0],x_vectors[:,1],c = y_vectors, cmap = "viridis")
+axs[2].set_title('Algoritmo estandarizatu gabe\nDatu originalak')
+axs[2].grid()
+axs[2].set_xlim([-lim,lim])
+axs[2].set_ylim([-lim,lim])
 plt.show()
 
 
-plt.plot(x,y_originala)
-plt.scatter(x_vectors[:,0],x_vectors[:,1],c = y_vectors, cmap = "viridis")
-plt.grid()
-plt.title("SVM-leuna SGD algoritmoarekin originala")
-plt.xlim([-lim,lim])
-plt.ylim([-lim,lim])
-plt.show()
 
 
-
-
-print(f"w_hat = {w_hat}")
-print(w)
-
-print(f"theta = {theta}")
