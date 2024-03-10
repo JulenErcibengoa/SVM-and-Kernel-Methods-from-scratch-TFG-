@@ -2,7 +2,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 
-def soft_SVM_SGD(x,y,T = 100,lamb = 1,standardize = True, plot = False):
+def soft_SVM_SGD(x,y,T = 100,lamb = 1,standardize = True, plot = False,lim = 5):
     """
     x = m luzeerako bektore multzoa (domeinua)
     y = m luzeerako bektorea (izenak)
@@ -14,6 +14,8 @@ def soft_SVM_SGD(x,y,T = 100,lamb = 1,standardize = True, plot = False):
     d = len(x[0]) + 1 # d + 1 dimentsioan lan egingo dugu, hiperplano homogeneoa bilatuz: w' = (b,w1,w2...,wd) eta x' = (1,x1,x2,...,xd)
     theta = theta = np.zeros([T+1,d])
     w = np.zeros([T,d])
+    mean = 0
+    sd = 0
 
     if standardize: 
         # Lan egingo ditugun datuak sortu (estandarizatuak)
@@ -29,8 +31,8 @@ def soft_SVM_SGD(x,y,T = 100,lamb = 1,standardize = True, plot = False):
         axs[0].scatter(x[:,0],x[:,1],c = y, cmap = "viridis")
         axs[0].set_title('Datu originalak')
         axs[0].grid()
-        axs[0].set_xlim([-3,3])
-        axs[0].set_ylim([-3,3])
+        axs[0].set_xlim([-lim,lim])
+        axs[0].set_ylim([-lim,lim])
         # plt.xlim([np.min(x[:,0]),np.max(x[:,0])])
         # plt.ylim([np.min(x[:,1]),np.max(x[:,1])])
         axs[1].scatter(x_new[:,1],x_new[:,2],c = y, cmap = "viridis")
@@ -51,28 +53,28 @@ def soft_SVM_SGD(x,y,T = 100,lamb = 1,standardize = True, plot = False):
             theta[t+1,:] = theta[t,:] + y[i-1]*x_new[i-1] # Konkatenazio hau egiten dugu x'-ren lehen elementua 1 delako
         else:
             theta[t+1,:] = theta[t,:]
-    return w,theta,(1/T) * np.sum(w,0),x_new
+    return w,theta,(1/T) * np.sum(w,0),x_new, mean, sd
     
 
-# Adibidea
+# # Adibidea
 
-# Lagina
-x = np.array([[2.3,1.2],[-1.7,0.7],[-0.4,-2.3],[-0.4,1.4],[-1.4,-1.2],[0.5,2.6],[0.6,-0.4],[-2.5,1.4],[1.5,-1.5],[-2.6,-0.5]])
-y_bek = np.array([1,-1,1,-1,1,-1,1,-1,1,-1,])
-# Emaitza
-w_hat,theta,w,x_berria = soft_SVM_SGD(x,y_bek,1000,0.5,standardize= True,plot=True)
-b = w[0]
+# # Lagina
+# x = np.array([[2.3,1.2],[-1.7,0.7],[-0.4,-2.3],[-0.4,1.4],[-1.4,-1.2],[0.5,2.6],[0.6,-0.4],[-2.5,1.4],[1.5,-1.5],[-2.6,-0.5]])
+# y_bek = np.array([1,-1,1,-1,1,-1,1,-1,1,-1,])
+# # Emaitza
+# w_hat,theta,w,x_berria = soft_SVM_SGD(x,y_bek,1000,0.5,standardize= True,plot=True)
+# b = w[0]
 
-x = np.linspace(-3, 3, 100)
-y = -b / w[2] - w[1]/w[2]*x
-plt.plot(x,y)
+# x = np.linspace(-3, 3, 100)
+# y = -b / w[2] - w[1]/w[2]*x
+# plt.plot(x,y)
 
 
-plt.scatter(x_berria[:,1],x_berria[:,2],c = y_bek, cmap = "viridis")
-plt.grid()
-plt.title("SVM-leuna SGD algoritmoarekin")
-plt.xlim([-3,3])
-plt.ylim([-3,3])
-plt.show()
+# plt.scatter(x_berria[:,1],x_berria[:,2],c = y_bek, cmap = "viridis")
+# plt.grid()
+# plt.title("SVM-leuna SGD algoritmoarekin")
+# plt.xlim([-3,3])
+# plt.ylim([-3,3])
+# plt.show()
 
 

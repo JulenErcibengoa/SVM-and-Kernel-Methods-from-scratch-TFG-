@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from SGD_soft_SVM import soft_SVM_SGD
 
 
-lim = 2.5
+lim = 10
 
 # Listas para almacenar las coordenadas
 coordenadas_x_pos = []
@@ -38,7 +38,7 @@ def click_neg(event):
     coordenadas_y_neg.append(event.ydata)
     # Se actualiza el gráfico con el nuevo punto
     plt.scatter(event.xdata, event.ydata, c='red')
-    plt.title(f"Puntu negatibo kopurura: {len(coordenadas_x_neg)}")
+    plt.title(f"Punto positibo kopurua: {len(coordenadas_x_pos)}\nPuntu negatibo kopurura: {len(coordenadas_x_neg)}")
     plt.draw()
 # Crear un gráfico vacío
 fig, ax = plt.subplots()
@@ -62,25 +62,32 @@ print(x_vectors)
 print(y_vectors)
 
 # ALGORITMOA EXEKUTATU
-w_hat,theta,w,x_berriak = soft_SVM_SGD(x_vectors,y_vectors,10000,0.1,standardize=True,plot=True)
+w_hat,theta,w,x_berriak,mean,sd = soft_SVM_SGD(x_vectors,y_vectors,10000,1,standardize=True,plot=True,lim = lim)
 b = w[0]
 b2 = w_hat[-1,0]
 
 x = np.linspace(-lim, lim, 100)
 y = -b / w[2] - w[1]/w[2]*x
 #y2 = -b2 / w_hat[-1,2] - w_hat[-1,1]/w_hat[-1,2]*x
+y_originala = mean[1] + sd[1]/w[2] * (-b - w[1]/sd[0]*(x-mean[0]))
+
 plt.plot(x,y)
-#plt.plot(x,y2)
-
-
-n_pos = len(coordenadas_x_pos)
-
 plt.scatter(x_berriak[:,1],x_berriak[:,2],c = y_vectors, cmap = "viridis")
 plt.grid()
-plt.title("SVM-leuna SGD algoritmoarekin")
+plt.title("SVM-leuna SGD algoritmoarekin estandarizatua")
+plt.xlim([-3,3])
+plt.ylim([-3,3])
+plt.show()
+
+
+plt.plot(x,y_originala)
+plt.scatter(x_vectors[:,0],x_vectors[:,1],c = y_vectors, cmap = "viridis")
+plt.grid()
+plt.title("SVM-leuna SGD algoritmoarekin originala")
 plt.xlim([-lim,lim])
 plt.ylim([-lim,lim])
 plt.show()
+
 
 
 
