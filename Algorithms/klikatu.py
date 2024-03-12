@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from SGD_soft_SVM import soft_SVM_SGD
+from SGD_soft_SVM_Kernels import soft_SVM_SGD_Kernel,gaussian_kernel,polynomial_kernel
 
 
-lim = 1000
+lim = 3
 
 # Listas para almacenar las coordenadas
 coordenadas_x_pos = []
@@ -58,8 +59,6 @@ y_coord = np.concatenate(( np.array(coordenadas_y_pos), np.array(coordenadas_y_n
 
 x_vectors = np.column_stack((x_coord,y_coord)) # Algoritmoan sartzeko prest
 y_vectors = np.concatenate((np.array([1 for x in coordenadas_x_pos]),np.array([-1 for x in coordenadas_x_neg])))
-print(x_vectors)
-print(y_vectors)
 
 
 
@@ -73,44 +72,121 @@ print(y_vectors)
 
 
 
+# ALGORITMOA (KERNEL)
+
+alpha_txap = soft_SVM_SGD_Kernel(x_vectors,y_vectors,lamb=0.1,kernel="gaussian_kernel")
+print(alpha_txap)
+
+# Plot
+
+n = 200
+
+x= np.linspace(-3,3,n)
+y = np.linspace(-3,3,n)
+m = len(x_vectors)
+
+X,Y = np.meshgrid(x,y)
+Z = np.zeros([n,n])
 
 
-# ALGORITMOA EXEKUTATU
-w_hat,theta,w,x_berriak,mean,sd = soft_SVM_SGD(x_vectors,y_vectors,10000,1,standardize=True,plot=True,lim = lim)
-b = w[0]
 
-x = np.linspace(-lim, lim, 100)
-y = -b / w[2] - w[1]/w[2]*x
-y_originala = mean[1] + sd[1]/w[2] * (-b - w[1]/sd[0]*(x-mean[0]))
+pos_x = []
+pos_y = []
+
+neg_x = []
+neg_y = []
+
+x_new = np.concatenate( (np.ones((m,1)),x_vectors) , axis = 1)
+
+for i in range(n):
+    for j in range(n):  
+        kernels = np.zeros(m)
+        for l in range(m):
+            kernels[l] = gaussian_kernel(x_new[l], np.array([1,x[i],y[j]]))
+        if np.dot(kernels,alpha_txap) > 0:
+            Z[j,i] = 1
+            pos_x.append(i)
+            pos_y.append(j)
+        else:
+            Z[j,i] = -1
+            neg_x.append(i)
+            neg_y.append(j)
+
+print(Z)
+#plt.scatter(pos_x,pos_y,c = "green",alpha = 0.5)
+#plt.scatter(neg_x,neg_y,c="red",alpha = 0.5)
+
+plt.contourf(X, Y, Z, cmap='viridis') 
+
+plt.scatter(x_vectors[:,0],x_vectors[:,1],c = y_vectors,cmap="viridis", edgecolors= "black")
 
 
-a,b,w_dis_gabe,k,k,k = soft_SVM_SGD(x_vectors,y_vectors,10000,1,standardize=False)
-b_dis_gabe = w_dis_gabe[0]
-y_dis_gabe = -b_dis_gabe / w_dis_gabe[2] - w_dis_gabe[1]/w_dis_gabe[2]*x
-# grafikoak
-
-fig, axs = plt.subplots(1, 3, figsize=(15, 4))
-axs[0].plot(x,y)
-axs[0].scatter(x_berriak[:,1],x_berriak[:,2],c = y_vectors, cmap = "viridis")
-axs[0].set_title('Algoritmo estandarizatua\nDatu estandarizatuak')
-axs[0].grid()
-axs[0].set_xlim([-3,3])
-axs[0].set_ylim([-3,3])
-
-axs[1].plot(x,y_originala)
-axs[1].scatter(x_vectors[:,0],x_vectors[:,1],c = y_vectors, cmap = "viridis")
-axs[1].set_title('Algoritmo estandarizatua\nDatu originalak')
-axs[1].grid()
-axs[1].set_xlim([-lim,lim])
-axs[1].set_ylim([-lim,lim])
-
-axs[2].plot(x,y_dis_gabe)
-axs[2].scatter(x_vectors[:,0],x_vectors[:,1],c = y_vectors, cmap = "viridis")
-axs[2].set_title('Algoritmo estandarizatu gabe\nDatu originalak')
-axs[2].grid()
-axs[2].set_xlim([-lim,lim])
-axs[2].set_ylim([-lim,lim])
 plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # ALGORITMOA EXEKUTATU
+# w_hat,theta,w,x_berriak,mean,sd = soft_SVM_SGD(x_vectors,y_vectors,10000,1,standardize=True,plot=True,lim = lim)
+# b = w[0]
+
+# x = np.linspace(-lim, lim, 100)
+# y = -b / w[2] - w[1]/w[2]*x
+# y_originala = mean[1] + sd[1]/w[2] * (-b - w[1]/sd[0]*(x-mean[0]))
+
+
+# a,b,w_dis_gabe,k,k,k = soft_SVM_SGD(x_vectors,y_vectors,10000,1,standardize=False)
+# b_dis_gabe = w_dis_gabe[0]
+# y_dis_gabe = -b_dis_gabe / w_dis_gabe[2] - w_dis_gabe[1]/w_dis_gabe[2]*x
+# # grafikoak
+
+# fig, axs = plt.subplots(1, 3, figsize=(15, 4))
+# axs[0].plot(x,y)
+# axs[0].scatter(x_berriak[:,1],x_berriak[:,2],c = y_vectors, cmap = "viridis")
+# axs[0].set_title('Algoritmo estandarizatua\nDatu estandarizatuak')
+# axs[0].grid()
+# axs[0].set_xlim([-3,3])
+# axs[0].set_ylim([-3,3])
+
+# axs[1].plot(x,y_originala)
+# axs[1].scatter(x_vectors[:,0],x_vectors[:,1],c = y_vectors, cmap = "viridis")
+# axs[1].set_title('Algoritmo estandarizatua\nDatu originalak')
+# axs[1].grid()
+# axs[1].set_xlim([-lim,lim])
+# axs[1].set_ylim([-lim,lim])
+
+# axs[2].plot(x,y_dis_gabe)
+# axs[2].scatter(x_vectors[:,0],x_vectors[:,1],c = y_vectors, cmap = "viridis")
+# axs[2].set_title('Algoritmo estandarizatu gabe\nDatu originalak')
+# axs[2].grid()
+# axs[2].set_xlim([-lim,lim])
+# axs[2].set_ylim([-lim,lim])
+# plt.show()
 
 
 

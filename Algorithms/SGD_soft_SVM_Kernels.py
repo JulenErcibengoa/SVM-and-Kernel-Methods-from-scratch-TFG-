@@ -6,7 +6,7 @@ import math
 def polynomial_kernel(xi,xj,deg = 2):
     return (np.dot(xi,xj) + 1)**2
 
-def gaussian_kernel(xi,xj,sigma = 1):
+def gaussian_kernel(xi,xj,sigma = 0.01):
     return math.exp((-1) * (np.linalg.norm(xi-xj)**2)/ (2*sigma))
 
 
@@ -50,51 +50,52 @@ def soft_SVM_SGD_Kernel(x,y,kernel = "poly",deg = 2,T = 1000,lamb = 1,standardiz
 
 
 
-# Adibidea
+# # Adibidea
 
-# Lagina
-x = np.array([[2.3,1.2],[-1.7,0.7],[-0.4,-2.3],[-0.4,1.4],[-1.4,-1.2],[0.5,2.6],[0.6,-0.4],[-2.5,1.4],[1.5,-1.5],[-2.6,-0.5]])
-y_bek = np.array([1,-1,1,-1,1,-1,1,-1,1,-1,])
-# Emaitza
+# # Lagina
+# x = np.array([[2.3,1.2],[-1.7,0.7],[-0.4,-2.3],[-0.4,1.4],[-1.4,-1.2],[0.5,2.6],[0.6,-0.4],[-2.5,1.4],[1.5,-1.5],[-2.6,-0.5]])
+# y_bek = np.array([1,-1,1,-1,1,-1,1,-1,1,-1,])
+# # Emaitza
 
-print( np.dot( [ 1.5, -1.5],[2.3, 1.2] ))
+# print( np.dot( [ 1.5, -1.5],[2.3, 1.2] ))
 
-alpha_txap = soft_SVM_SGD_Kernel(x,y_bek,kernel="gaussian_kernel")
-print(alpha_txap)
-
-x_plot= np.linspace(-3,3,200)
-y = np.linspace(-3,3,200)
+# alpha_txap = soft_SVM_SGD_Kernel(x,y_bek,kernel="gaussian_kernel")
+# print(alpha_txap)
 
 
-pos_x = []
-pos_y = []
+# # Plot
+# x_plot= np.linspace(-3,3,200)
+# y = np.linspace(-3,3,200)
 
-neg_x = []
-neg_y = []
+# pos_x = []
+# pos_y = []
 
-x_new = np.concatenate( (np.ones((len(x),1)),x) , axis = 1)
-for i in x_plot:
-    for j in y:  
-        kernels = np.zeros(len(x))
-        for l in range(len(x)):
-            kernels[l] = gaussian_kernel(x_new[l], np.array([1,i,j]))
-        if np.dot(kernels,alpha_txap) > 0:
-            pos_x.append(i)
-            pos_y.append(j)
-        else:
-            neg_x.append(i)
-            neg_y.append(j)
+# neg_x = []
+# neg_y = []
 
-plt.scatter(pos_x,pos_y,c = "green",alpha = 0.5)
-plt.scatter(neg_x,neg_y,c="red",alpha = 0.5)
+# x_new = np.concatenate( (np.ones((len(x),1)),x) , axis = 1)
+# for i in x_plot:
+#     for j in y:  
+#         kernels = np.zeros(len(x))
+#         for l in range(len(x)):
+#             kernels[l] = gaussian_kernel(x_new[l], np.array([1,i,j]))
+#         if np.dot(kernels,alpha_txap) > 0:
+#             pos_x.append(i)
+#             pos_y.append(j)
+#         else:
+#             neg_x.append(i)
+#             neg_y.append(j)
 
-plt.scatter(x[:,0],x[:,1],c = y_bek,cmap="viridis")
+# plt.scatter(pos_x,pos_y,c = "green",alpha = 0.5)
+# plt.scatter(neg_x,neg_y,c="red",alpha = 0.5)
+
+# plt.scatter(x[:,0],x[:,1],c = y_bek,cmap="viridis")
 
 
-plt.show()
+# plt.show()
 
 
-print(np.linalg.norm(np.array([2,3])))
-print(math.sqrt(2**2+3**2))
+# print(np.linalg.norm(np.array([2,3])))
+# print(math.sqrt(2**2+3**2))
 
-print(math.exp(1))
+# print(math.exp(1))
