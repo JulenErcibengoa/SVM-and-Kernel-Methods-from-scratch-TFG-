@@ -7,7 +7,7 @@ from random import randint
 import pickle
 
 # Parametroak (alda daitezke):
-grid_size = 25  # Karratu bakoitzaren tamaina pixeletan
+grid_size = 30  # Karratu bakoitzaren tamaina pixeletan (minimoa 20)
 
 # Koloreak
 WHITE = (238,238,210)
@@ -42,6 +42,7 @@ Y_entrenamendu = entrenamendu_datuak["label"]
 X_test = testeatzeko_datuak.iloc[:,1:]
 Y_test = testeatzeko_datuak["label"]
 
+zutabeen_izenak = X_entrenamendu.columns.tolist()
 
 # -------------------------------------------------------------------------------
 # -------------------------------MODELOA INPORTATU-------------------------------
@@ -49,11 +50,14 @@ Y_test = testeatzeko_datuak["label"]
 
 modeloa = pickle.load(open("SkLearn_SVC_model_C_4.pkl","rb"))
 
-# Honek ez badu funtzionatzen, ondorengo kodea exekutatu: 
+# Honek ez badu funtzionatzen, ondorengo kodea exekutatu (ctrl + k + u, deskomentatzeko): 
+
 # modeloa = SVC(C = 4)
-# modeloa.fit(X_entrenamendu,Y_entrenamendu)
-
-
+# hasierako_denbora = time.time()
+# modeloa.fit(X_entrenamendu.values,Y_entrenamendu) # .values egiten dugu horrela zutabeen
+# # izenak ez dira beharrezkoak aurresaterako garaian
+# amaierako_denbora = time.time()
+# print(f"Entrenatzeko beharrezko denbora: {amaierako_denbora-hasierako_denbora}s")
 
 
 
@@ -150,7 +154,7 @@ def adibideak_ikusi():
 
     # Botoia:
     botoia_hurrengo_adibidea = Botoia(width - 230, 325, 170, 40, BUTTON_COLOR, "Hurrengo adibidea")
-    botoia_itzuli_menura = Botoia(width - 230, 375, 170, 40, BUTTON_COLOR, "Menura itzuli")
+    botoia_itzuli_menura = Botoia(width - 230, height - 50, 170, 40, BUTTON_COLOR, "Menura itzuli")
 
     # Loop orokorra
     while running:
@@ -172,7 +176,7 @@ def adibideak_ikusi():
         # while buklearen amaieran, pantaila marraztu, textua idatzi eta aktualizatzeko
         kuadrikula_marraztu(np.array(X_entrenamendu.iloc[zenbagarren_adibidea,:]).reshape(n,n),screen)
         screen.blit(izenburua.render("MNIST datu-baseko adibideak", True, TEXT_COLOR),(width - 295, 30))
-        screen.blit(digitua.render(str(Y_entrenamendu[zenbagarren_adibidea]), True, TEXT_COLOR),(width - 205, 130))
+        screen.blit(digitua.render(str(Y_entrenamendu[zenbagarren_adibidea]), True, BLACK),(width - 205, 130))
         screen.blit(instrukzioak.render("Sakatu 'enter' hurrengo digitua ikusteko", True, TEXT_COLOR),(width - 295, 55))
         botoia_itzuli_menura.draw(screen)
         botoia_hurrengo_adibidea.draw(screen)
@@ -193,7 +197,7 @@ def predezitu():
     marrazten = False
     garbitzen = False
     zenbakia = np.zeros((n,n),dtype=int)
-    predikzioa = "?"
+    predikzioa = "1"
 
     # Textuak idazteko beharrezkoa:
     izenburua = pygame.font.Font(None, 37)
@@ -201,29 +205,30 @@ def predezitu():
     instrukzioak = pygame.font.Font(None,20)
 
     # Botoia:
-    botoia_predezitu = Botoia(width - 230, 275, 170, 40, BUTTON_COLOR, "Zenbakia predezitu")
     botoia_garbitu = Botoia(width - 230, 325, 170, 40, BUTTON_COLOR, "Garbitu")
-    botoia_itzuli_menura = Botoia(width - 230, 375, 170, 40, BUTTON_COLOR, "Menura itzuli")
+    botoia_itzuli_menura = Botoia(width - 230, height - 50, 170, 40, BUTTON_COLOR, "Menura itzuli")
 
     # Loop orokorra
     while running:
+        if np.array_equal(zenbakia,np.zeros((n,n),dtype=int)):
+            predikzioa = "?"
+        else:
+            predikzioa = modeloa.predict(zenbakia.reshape((1,n**2)))[0]
+
         for event in pygame.event.get():
             keys = pygame.key.get_pressed()
             if event.type == pygame.QUIT: # Exekutatzeaz bukatzeko
                 running = False
                 zer_egin = "amaitu"
             elif keys[pygame.K_RETURN]: # Enter botoia sakatzerakoan
-                predikzioa = modeloa.predict(zenbakia.reshape((1,n**2)))[0]
+                zenbakia = np.zeros((n,n),dtype=int)
             elif event.type == pygame.MOUSEBUTTONDOWN: # Xaguaren botoiren bat sakatzen bada
                 if event.button == 1: # Ezkerreko botoia sakatzen bada
                     if botoia_itzuli_menura.rect.collidepoint(event.pos):
                         running = False
                         zer_egin = "menua_ireki"
-                    elif botoia_predezitu.rect.collidepoint(event.pos):
-                        predikzioa = modeloa.predict(zenbakia.reshape((1,n**2)))[0]
                     elif botoia_garbitu.rect.collidepoint(event.pos):
                         zenbakia = np.zeros((n,n))
-                        predikzioa = "?"
                     else:    
                         marrazten = True
                         x,y = event.pos
@@ -257,15 +262,13 @@ def predezitu():
         # while buklearen amaieran, pantaila marraztu, textua idatzi eta aktualizatzeko
         kuadrikula_marraztu(zenbakia,screen)
         screen.blit(izenburua.render("Modeloaren predikzioa", True, TEXT_COLOR),(width - 290, 20))
-        screen.blit(digitua.render(str(predikzioa), True, TEXT_COLOR),(width - 215, 80))
-        screen.blit(instrukzioak.render("Sakatu 'enter' predezitzeko", True, TEXT_COLOR),(width - 295, 55))
+        screen.blit(digitua.render(str(predikzioa), True, BLACK),(width - 215, 80))
+        screen.blit(instrukzioak.render("Sakatu 'enter' irudia garbitzeko", True, TEXT_COLOR),(width - 295, 55))
         botoia_itzuli_menura.draw(screen)
-        botoia_predezitu.draw(screen)
         botoia_garbitu.draw(screen)
         pygame.display.flip()
         
     return zer_egin
-
 
 def menua():
     """
@@ -275,13 +278,23 @@ def menua():
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("MNIST interaktiboa")
 
+    # Irudiak:
+    botoien_dist = height//10
+    irudia = pygame.image.load("Menu_figure.png") 
+    irudia = pygame.transform.scale(irudia, (botoien_dist * 5.5, botoien_dist*4))
+    irudia_rect = irudia.get_rect()
+    irudia_rect.center = (width // 2, height // 2 - botoien_dist* 1.3)
+
     # Beharrezko aldagaia
     running = True
 
-    # Botoia:
-    botoia_adibideak_ikusi = Botoia(width//2, 100, 160, 40, BUTTON_COLOR, "Ikusi MNIST-en adibideak")
-    botoia_digituak_predezitu = Botoia(width//2, 200, 160, 40, BUTTON_COLOR, "Marraztu digituak modeloak aurresateko")
+    # Textuak idazteko beharrezkoa:
+    izenburua = pygame.font.Font(None, 107)
 
+    # Botoia:
+    botoia_adibideak_ikusi = Botoia(width//2-350//2, height // 2 + botoien_dist * 1, 350, 40, BUTTON_COLOR, "Ikusi MNIST-en adibideak")
+    botoia_digituak_predezitu = Botoia(width//2-350//2, height // 2 + botoien_dist * 2 , 350, 40, BUTTON_COLOR, "Marraztu digituak modeloak aurresateko")
+    botoia_irten = Botoia(width//2-350//2, height // 2 + botoien_dist * 4, 350, 40, BUTTON_COLOR, "Irten")
 
     # Loop orokorra
     while running:
@@ -297,18 +310,21 @@ def menua():
                     elif botoia_digituak_predezitu.rect.collidepoint(event.pos):
                         running = False
                         zer_egin = "predezitu_ireki"
+                    elif botoia_irten.rect.collidepoint(event.pos):
+                        running = False
+                        zer_egin = "amaitu"
 
         # while buklearen amaieran, pantaila marraztu, textua idatzi eta aktualizatzeko
         screen.fill(WHITE)
+        screen.blit(izenburua.render("MNIST interaktiboa", True, BLACK),(width//2 - 345, 20))
         botoia_adibideak_ikusi.draw(screen)
         botoia_digituak_predezitu.draw(screen)
+        botoia_irten.draw(screen)
+        screen.blit(irudia, irudia_rect)
         pygame.display.flip()
 
     return zer_egin
     
-
-
-
 def main():
     # Beharrezko aldagaiak:
     zer_egin = "menua_ireki"
@@ -326,8 +342,6 @@ def main():
 
         elif zer_egin == "predezitu_ireki":
             zer_egin = predezitu()
-
-
 
     # Pygame amaitu
     pygame.quit()

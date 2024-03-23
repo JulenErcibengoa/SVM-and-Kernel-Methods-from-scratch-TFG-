@@ -28,10 +28,10 @@ Y_test = testeatzeko_datuak["label"]
 modeloa = SVC(C = 4)
 
 hasierako_denbora = time.time()
-modeloa.fit(X_entrenamendu,Y_entrenamendu)
+modeloa.fit(X_entrenamendu.values,Y_entrenamendu)
 amaierako_denbora = time.time()
 
-# print(f"Entrenatzeko beharrezko denbora: {amaierako_denbora-hasierako_denbora}")
+print(f"Entrenatzeko beharrezko denbora: {amaierako_denbora-hasierako_denbora}")
 # print(f"Entrenamendu errorea: {modeloa.score(X_entrenamendu,Y_entrenamendu)}")
 # print(f"Testak erabiliz lortutako errorea: {modeloa.score(X_test,Y_test)}")
 
