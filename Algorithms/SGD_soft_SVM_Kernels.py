@@ -6,7 +6,7 @@ import math
 def polynomial_kernel(xi,xj,deg = 2):
     return (np.dot(xi,xj) + 1)**2
 
-def gaussian_kernel(xi,xj,sigma = 0.01):
+def gaussian_kernel(xi,xj,sigma = 0.1):
     return math.exp((-1) * (np.linalg.norm(xi-xj)**2)/ (2*sigma))
 
 
