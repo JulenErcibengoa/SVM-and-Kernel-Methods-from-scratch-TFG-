@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.svm import SVC # Jada SVM inplementatutako pythoneko pakete bat
 from random import randint
 import pickle
-import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 import pygame_gui
 
 # Parametroak (alda daitezke):
@@ -141,28 +141,41 @@ def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 
 
     model.fit(X,Y)
 
-    # Step 2: Generate mesh grid
-    # Define the range of x and y values
+    # Datuen minimo eta maximoak
+    h = 0.01
     x_min, x_max = np.min(X[:, 0]) - 0.2, np.max(X[:, 0]) + 0.2
     y_min, y_max = np.min(X[:, 1]) - 0.2, np.max(X[:, 1]) + 0.2
-
-    # Create a mesh grid
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01),
-                        np.arange(y_min, y_max, 0.01))
-
-    # Step 3: Predict class labels for all points on mesh grid
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                     np.arange(y_min, y_max, h))
     Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
     Z = Z.reshape(xx.shape)
 
-    # Step 4: Plot decision surface
-    plt.contourf(xx, yy, Z, alpha=0.4)
-    plt.scatter(X[:, 0], X[:, 1], c=Y, s=20, edgecolors='k')
-    plt.xlabel(r'$x_1$')
-    plt.ylabel(r'$x_2$')
-    plt.title(f'Modeloaren erabaki gainazala\n kernela = {kernel_mota}, C = {koefizientea}, Zehaztasuna = {round(model.score(X,Y),3)}')
-    plt.show()
-
-    return model
+    fig = go.Figure(data=go.Contour(
+    z=Z,
+    x=np.arange(x_min, x_max, h),
+    y=np.arange(y_min, y_max, h),
+    colorscale='RdBu',  # Especificar la escala de colores
+    opacity=0.6,  # Opacidad de los contornos
+    showlegend=False
+))
+    fig.add_trace(go.Scatter(
+    x=X[:, 0],
+    y=X[:, 1],
+    mode='markers',
+    marker=dict(
+        color=Y,
+        colorscale='RdBu',
+        size=8,
+        line=dict(width=1, color='Black'),
+    ),
+    showlegend=False
+))
+    fig.update_layout(
+    xaxis_title=r'$x_1$',
+    yaxis_title=r'$x_2$',
+    title=f'Modeloaren erabaki-gainazala: Kernel = {kernel_mota}, C = {koefizientea}, Modeloaren entrenamendu datuen errorea = {round(model.score(X,Y),3)}',
+)
+    fig.show()
 
 # Botoien funtzionalitate orokorra         
 class Botoia:
