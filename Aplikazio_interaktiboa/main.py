@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pygame_gui
 
 # Parametroak (alda daitezke):
-grid_size = 30  # Karratu bakoitzaren tamaina pixeletan (minimoa 20)
+grid_size = 20  # Karratu bakoitzaren tamaina pixeletan (minimoa 20)
 
 # Koloreak
 WHITE = (238,238,210)
@@ -159,7 +159,7 @@ def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 
     plt.scatter(X[:, 0], X[:, 1], c=Y, s=20, edgecolors='k')
     plt.xlabel(r'$x_1$')
     plt.ylabel(r'$x_2$')
-    plt.title(f'Modeloaren erabaki gainazala\n kernela = {kernel_mota}, C = {round(koefizientea,3)}, Zehaztasuna = {round(model.score(X,Y),3)}')
+    plt.title(f'Modeloaren erabaki gainazala\n kernela = {kernel_mota}, C = {koefizientea}, Zehaztasuna = {round(model.score(X,Y),3)}')
     plt.show()
 
     return model
@@ -329,7 +329,7 @@ def SVM_bisuala():
     # Modeloaren koefizientea aldatzeko barra sortzeko:
     manager = pygame_gui.UIManager((width, height))
     slider = pygame_gui.elements.UIHorizontalSlider(
-        relative_rect=pygame.Rect((width - 230, 325- 30 + botoien_distantzia), (170, 20)),
+        relative_rect=pygame.Rect((width - 230, height - 50 - 3 * botoien_distantzia - 30), (170, 20)),
         start_value=0,  # Valor inicial del deslizador
         value_range=(-4, 5),  # Rango de valores del deslizador
         manager=manager)
@@ -356,10 +356,10 @@ def SVM_bisuala():
     puntuak = pygame.font.Font(None,30)
 
     # Botoia:
-    botoia_garbitu = Botoia(width - 230, 325 + 3*botoien_distantzia, 170, 40, BUTTON_COLOR, "Garbitu")
+    botoia_garbitu = Botoia(width - 230, height - 50 - 1 * botoien_distantzia, 170, 40, BUTTON_COLOR, "Garbitu")
     botoia_itzuli_menura = Botoia(width - 230, height - 50, 170, 40, BUTTON_COLOR, "Menura itzuli")
-    botoia_modeloa_sortu = Botoia(width - 230, 325 + 2*botoien_distantzia, 170, 40, BUTTON_COLOR, "Modeloa sortu")
-    botoia_kernel_mota = Botoia(width - 230, 325 + botoien_distantzia, 170, 40, BUTTON_COLOR, "Kernel mota")
+    botoia_modeloa_sortu = Botoia(width - 230, height - 50 - 2 * botoien_distantzia, 170, 40, BUTTON_COLOR, "Modeloa sortu")
+    botoia_kernel_mota = Botoia(width - 230, height - 50 - 3 * botoien_distantzia, 170, 40, BUTTON_COLOR, "Kernel mota")
 
     # Loop orokorra
     while running:
@@ -433,7 +433,7 @@ def SVM_bisuala():
         # Modeloaren koefizientea lortu
         manager.update(delta_time)
         manager.draw_ui(screen)
-        koefizientea = 2**(slider.get_current_value())
+        koefizientea = round(2**(slider.get_current_value()),3)
 
         # Puntuak marraztu
         for punto in berdeak:
@@ -451,7 +451,7 @@ def SVM_bisuala():
         screen.blit(puntuak.render(f"Puntu gorri kopurua = {len(gorriak)}", True, (100,0,0)),(width - 295, 195))
         screen.blit(puntuak.render(f"Modelo mota:", True, TEXT_COLOR),(width - 295, 215))
         screen.blit(puntuak.render(modeloa, True, TEXT_COLOR),(width - 270, 235))
-        screen.blit(puntuak.render(f"C = {round(koefizientea,5)}", True, TEXT_COLOR),(width - 270, 255))
+        screen.blit(puntuak.render(f"C = {koefizientea}", True, TEXT_COLOR),(width - 270, 255))
         botoia_itzuli_menura.draw(screen)
         botoia_garbitu.draw(screen)
         botoia_modeloa_sortu.draw(screen)
