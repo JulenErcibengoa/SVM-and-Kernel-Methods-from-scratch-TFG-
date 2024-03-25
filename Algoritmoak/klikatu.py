@@ -1,7 +1,72 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from SGD_soft_SVM import soft_SVM_SGD
-from SGD_soft_SVM_Kernels import soft_SVM_SGD_Kernel,gaussian_kernel,polynomial_kernel
+from SGD_soft_SVM_Kernels import Nire_SGD_kernelekin,gaussian_kernel,polynomial_kernel
+
+
+# # Adibidea
+
+# Lagina
+X = np.array([[2.3,1.2],[-1.7,0.7],[-0.4,-2.3],[-0.4,1.4],[-1.4,-1.2],[0.5,2.6],[0.6,-0.4],[-2.5,1.4],[1.5,-1.5],[-2.6,-0.5],[3,3],[3.2,3.1],[2.8,3.5],[3.5,3.1],[3,4.2],[3.8,4],[-4,4],[-4.6,3.8],[-4.2,3.9],[-4,4.8],[-4.4,3.9]])
+Y = np.array([1,-1,1,-1,1,-1,1,-1,1,-1,2,2,2,2,2,2,3,3,3,3,3])
+
+# Emaitza
+model = Nire_SGD_kernelekin(1,"kernel polinomiala")
+model.fit(X,Y,100000)
+print("Fitted!")
+
+# Plot
+x_plot = np.linspace(-5,5,200)
+y_plot = np.linspace(-5,5,200)
+
+pos = []
+neg = []
+bestea = []
+hurrengoak = []
+
+for x in x_plot:
+    for y in y_plot:
+        predikzioa = model.predict([x,y])
+        if  predikzioa == 1:
+            pos.append([x,y])
+        elif predikzioa == -1:
+            neg.append([x,y])
+        elif predikzioa == 2:
+            bestea.append([x,y])
+        elif predikzioa == 3:
+            hurrengoak.append([x,y])    
+
+pos = np.array(pos)
+neg = np.array(neg)
+bestea = np.array(bestea)
+hurrengoak = np.array(hurrengoak)
+
+
+
+plt.scatter(pos[:,0],pos[:,1],c = "green",alpha = 0.5)
+if len(neg) > 0:
+    plt.scatter(neg[:,0],neg[:,1],c="red",alpha = 0.5)
+plt.scatter(bestea[:,0],bestea[:,1],c="orange",alpha = 0.5)
+plt.scatter(hurrengoak[:,0],hurrengoak[:,1],c="blue",alpha = 0.5)
+
+plt.scatter(X[:,0],X[:,1],c = Y,cmap="viridis")
+
+plt.xlim([-5,5])
+plt.ylim([-5,5])
+
+plt.title(f"Modeloaren zehaztasuna = {model.score(X,Y)}")
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
 
 
 lim = 3
@@ -74,14 +139,13 @@ y_vectors = np.concatenate((np.array([1 for x in coordenadas_x_pos]),np.array([-
 
 # ALGORITMOA (KERNEL)
 
-alpha_txap = soft_SVM_SGD_Kernel(x_vectors,y_vectors,lamb=0.1,kernel="gaussian_kernel")
-print(alpha_txap)
-
+modeloa = Nire_SGD_kernelekin(0.01,"kernel gaussiarra")
+modeloa.fit(x_vectors,y_vectors)
 # Plot
 
 n = 200
 
-x= np.linspace(-3,3,n)
+x = np.linspace(-3,3,n)
 y = np.linspace(-3,3,n)
 m = len(x_vectors)
 
@@ -100,10 +164,7 @@ x_new = np.concatenate( (np.ones((m,1)),x_vectors) , axis = 1)
 
 for i in range(n):
     for j in range(n):  
-        kernels = np.zeros(m)
-        for l in range(m):
-            kernels[l] = gaussian_kernel(x_new[l], np.array([1,x[i],y[j]]))
-        if np.dot(kernels,alpha_txap) > 0:
+        if modeloa.predict([x[i],y[j]]) == 1:
             Z[j,i] = 1
             pos_x.append(i)
             pos_y.append(j)
@@ -119,7 +180,7 @@ print(Z)
 plt.contourf(X, Y, Z, cmap='viridis') 
 
 plt.scatter(x_vectors[:,0],x_vectors[:,1],c = y_vectors,cmap="viridis", edgecolors= "black")
-
+plt.title(f"Modeloaren zehaztasuna = {modeloa.score(x_vectors,y_vectors)}")
 
 plt.show()
 

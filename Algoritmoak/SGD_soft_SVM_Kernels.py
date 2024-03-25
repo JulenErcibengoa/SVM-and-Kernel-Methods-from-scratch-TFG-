@@ -1,101 +1,120 @@
 import random
 import numpy as np
-import matplotlib.pyplot as plt
 import math
 
 def polynomial_kernel(xi,xj,deg = 2):
-    return (np.dot(xi,xj) + 1)**2
+    return (np.dot(xi,xj) + 1)**deg
 
 def gaussian_kernel(xi,xj,sigma = 0.1):
-    return math.exp((-1) * (np.linalg.norm(xi-xj)**2)/ (2*sigma))
+    return math.exp( (-1) * (np.dot(xi-xj,xi-xj))/ (2*sigma) )
 
+def linear_kernel(xi,xj, k = 0):
+    return np.dot(xi,xj) + k
 
-def soft_SVM_SGD_Kernel(x,y,kernel = "poly",deg = 2,T = 1000,lamb = 1,standardize = True, plot = False,lim = 5):
-    """
-    x = m luzeerako bektore multzoa (domeinua)
-    y = m luzeerako bektorea (izenak)
-    lamb = lambda parametroa
-    T = iterazio kopurua
-    """
-    if kernel == "poly":
-        K = polynomial_kernel
-    elif kernel == "gaussian_kernel":
-        K = gaussian_kernel
+class Nire_SGD_kernelekin:
+    def __init__(self,koeficient,kernel):
+        self.entrenatuta = False
+        self.klaseanitz = False
+        self.alpha = None # Modeloaren entrenatu ondorengo aldagaiak hemen egongo dira
+        self.X = None
+        self.Y_bakarrak = None
+        self.m = None
+        self.koeficient = 1 / koeficient # Scikit-Learn paketearen baliokidea izateko
 
-    # Beharrezko aldagaiak sortu:
-    m = len(x)
-    d = len(x[0]) + 1 # d + 1 dimentsioan lan egingo dugu, hiperplano homogeneoa bilatuz: w' = (b,w1,w2...,wd) eta x' = (1,x1,x2,...,xd)
-    alpha = np.zeros([T,m])
-    beta = np.zeros([T+1,m])
-    x_new =  np.concatenate( (np.ones((m,1)),x) , axis = 1)
-    
-    # Algoritmoa:
-    for t in range(T):
-        alpha[t,:] = 1 / (lamb * (t+1)) * beta[t,:]
-        i = random.randint(1,m)
-        beta_i = beta[t,i-1]
-        beta[t+1,:] = beta[t,:]
-        
-        kernels = np.zeros(m)
-        for j in range(m):
-            kernels[j] = K(x[i-1],x[j]) # Hau egiteko modu efizienteago bat?
-
-        if y[i-1]*np.dot(alpha[t,:],kernels) < 1:            
-            beta[t+1,i-1] = beta_i + y[i-1] 
+        # Kernel aukeraketa:
+        if kernel == "kernel gaussiarra":
+            self.kernel = gaussian_kernel
+        elif kernel == "kernel polinomiala":
+            self.kernel = polynomial_kernel
+        elif kernel == "kernel lineala":
+            self.kernel = linear_kernel
         else:
-            beta[t+1,i-1] = beta[t,i-1]
+            print("Sartu duzun kernela ez da zuzena!")
+            self.kernel = gaussian_kernel
 
-    return (1/T) * np.sum(alpha,0)
-    
+    def kernelak_kalkulatu(self,x):
+        return [self.kernel(xi,x) for xi in self.X]
+        
+    def fit(self,X,Y,iter = 10000):
+        """
+        Algoritmoa entrenatzen du X bektore eta Y izeneko lagin batekin.
+        """
+        self.m = len(X)
+        self.X =  np.concatenate( (np.ones((self.m,1)),X) , axis = 1) # Ondoren predikzioak egiteko gorde egingo dugu klasearen barruan
+        if len(np.unique(Y)) == 2: # Klasifikazio dikotomikoa
+            T = iter
+            alpha = np.zeros([T,self.m])
+            beta = np.zeros([T+1,self.m]) # T+1 jartzen dugu azken iterazioan arazorik ez egoteko, hala ere ez dugu iterazio horko informazioa erabiliko
+            # Algoritmoa:
+            for t in range(T):
+                # 1. Pausua:
+                alpha[t,:] = 1 / (self.koeficient * (t+1)) * beta[t,:] # t+1 egiten dugu Pythonen indizeak 0-n hasten direlako
+                # 2. Pausua:
+                i = random.randint(1,self.m) - 1 # -1 egiten dugu indizeen arazoa konpontzeko
+                # 3. Pausua:
+                beta[t+1,:] = beta[t,:] # Oraingoz beta_i^(t+1) = beta_i^(t) da, gero aldatuko dugu 
+                # 4. Pausua, kernelak kalkulatu: 
+                kernels = self.kernelak_kalkulatu(self.X[i])
+                if (Y[i]*np.dot(alpha[t,:],kernels) < 1):            
+                    beta[t+1,i] = beta[t,i] + Y[i] 
+                else:
+                    beta[t+1,i] = beta[t,i]
+            self.alpha =  (1/T) * np.sum(alpha,0) # Predikzioak egiteko definitu
 
+        else: # Klasifikazio anitzkoitza
+            self.klaseanitz = True
+            self.alpha = [] # k klaserako, k hipotesi desberdinen 'outputak'
+            self.Y_bakarrak = np.unique(Y)
+            Y_desberdinak = []
+            for izena in self.Y_bakarrak:
+                Y_desberdinak.append([1 if elementua == izena else -1 for elementua in Y])
 
+            for Y_desb in Y_desberdinak:
+                # Entrenatu (goiko kode berdina)
+                T = iter
+                alpha = np.zeros([T,self.m])
+                beta = np.zeros([T+1,self.m])
+                for t in range(T):
+                    alpha[t,:] = 1 / (self.koeficient * (t+1)) * beta[t,:]
+                    i = random.randint(1,self.m) - 1
+                    beta[t+1,:] = beta[t,:] 
+                    kernels = self.kernelak_kalkulatu(self.X[i])
+                    if (Y_desb[i]*np.dot(alpha[t,:],kernels) < 1):            
+                        beta[t+1,i] = beta[t,i] + Y_desb[i] 
+                    else:
+                        beta[t+1,i] = beta[t,i]
+                self.alpha.append((1/T) * np.sum(alpha,0))
+            
+        self.entrenatuta = True
 
-# # Adibidea
+    def predict(self,x):
+        """
+        x domeinuko elementu berri batentzako, jada entrenatutako modeloak ematen duen x-ren izena itzuliko du.
+        """
+        x_predict = np.concatenate(([1],x))
+        if self.entrenatuta and not self.klaseanitz: # Klasifikazio normala (Y = {+1, -1})
+            kernelak = self.kernelak_kalkulatu(x_predict)
+            balioa = np.dot(self.alpha,kernelak)
+            return 1 if balioa > 0 else -1
+        elif self.entrenatuta and self.klaseanitz: # Klasifikazio anitzkoitza
+            kernelak = self.kernelak_kalkulatu(x_predict)
+            balioak = []
+            for alpha in self.alpha:
+                balioak.append(np.dot(alpha,kernelak))
+            return self.Y_bakarrak[np.argmax(balioak)]
+        else:
+            print("Modeloa oraindik ez da entrenatu")
 
-# # Lagina
-# x = np.array([[2.3,1.2],[-1.7,0.7],[-0.4,-2.3],[-0.4,1.4],[-1.4,-1.2],[0.5,2.6],[0.6,-0.4],[-2.5,1.4],[1.5,-1.5],[-2.6,-0.5]])
-# y_bek = np.array([1,-1,1,-1,1,-1,1,-1,1,-1,])
-# # Emaitza
+    def score(self,X,Y):
+        """
+        X bektoreko eta Y izeneko datu-multzo bat emanik, modeloak dauden datu guztietatik ongi klasifikatzen dituen proportzioa itzuliko du
+        """
+        if self.entrenatuta:
+            m = len(X)
+            klasifikazio_zuzen_kopurua = 0
+            for i,bektore in enumerate(X):
+                if self.predict(bektore) == Y[i]:
+                    klasifikazio_zuzen_kopurua += 1
+            return klasifikazio_zuzen_kopurua / m
+        print("Modeloa oraindik ez da entrenatu")
 
-# print( np.dot( [ 1.5, -1.5],[2.3, 1.2] ))
-
-# alpha_txap = soft_SVM_SGD_Kernel(x,y_bek,kernel="gaussian_kernel")
-# print(alpha_txap)
-
-
-# # Plot
-# x_plot= np.linspace(-3,3,200)
-# y = np.linspace(-3,3,200)
-
-# pos_x = []
-# pos_y = []
-
-# neg_x = []
-# neg_y = []
-
-# x_new = np.concatenate( (np.ones((len(x),1)),x) , axis = 1)
-# for i in x_plot:
-#     for j in y:  
-#         kernels = np.zeros(len(x))
-#         for l in range(len(x)):
-#             kernels[l] = gaussian_kernel(x_new[l], np.array([1,i,j]))
-#         if np.dot(kernels,alpha_txap) > 0:
-#             pos_x.append(i)
-#             pos_y.append(j)
-#         else:
-#             neg_x.append(i)
-#             neg_y.append(j)
-
-# plt.scatter(pos_x,pos_y,c = "green",alpha = 0.5)
-# plt.scatter(neg_x,neg_y,c="red",alpha = 0.5)
-
-# plt.scatter(x[:,0],x[:,1],c = y_bek,cmap="viridis")
-
-
-# plt.show()
-
-
-# print(np.linalg.norm(np.array([2,3])))
-# print(math.sqrt(2**2+3**2))
-
-# print(math.exp(1))
