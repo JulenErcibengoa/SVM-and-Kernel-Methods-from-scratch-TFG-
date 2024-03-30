@@ -149,7 +149,7 @@ def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 
         if kernel_mota == "kernel gaussiarra":
             model = SVC(C = koefizientea, kernel = "rbf")
         elif kernel_mota == "kernel polinomiala":
-            model = SVC(C = koefizientea, kernel = "poly")
+            model = SVC(C = koefizientea, kernel = "poly", coef0 = 0)
         elif kernel_mota == "kernel lineala":
             model = SVC(C = koefizientea, kernel = "linear")
     else:
