@@ -109,6 +109,12 @@ class Nire_SGD_kernelekin:
             return self.Y_bakarrak[np.argmax(balioak)]
         else:
             print("Modeloa oraindik ez da entrenatu")
+    
+    def predict_anitzkoitza(self,x_multzoa):
+        labels = np.zeros(len(x_multzoa))
+        for i,x in enumerate(x_multzoa):
+            labels[i] = self.predict(x)
+        return labels
 
     def score(self,X,Y):
         """
@@ -120,7 +126,6 @@ class Nire_SGD_kernelekin:
             for i,bektore in enumerate(X):
                 if self.predict(bektore) == Y[i]:
                     klasifikazio_zuzen_kopurua += 1
-                print(i)
             self.nota = klasifikazio_zuzen_kopurua / m
             return self.nota
         print("Modeloa oraindik ez da entrenatu")

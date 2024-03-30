@@ -7,6 +7,7 @@ from random import randint
 import pickle
 import plotly.graph_objects as go
 import pygame_gui
+from SGD_soft_SVM_Kernels import Nire_SGD_kernelekin
 
 # Parametroak (alda daitezke):
 grid_size = 20  # Karratu bakoitzaren tamaina pixeletan (minimoa 20)
@@ -52,9 +53,22 @@ zutabeen_izenak = X_entrenamendu.columns.tolist()
 # -------------------------------MODELOA INPORTATU-------------------------------
 # -------------------------------------------------------------------------------
 
-modeloa = pickle.load(open("SkLearn_SVC_model_C_4.pkl","rb"))
+# Scikit-learn MODELOA:
+modeloa_sci = pickle.load(open("SkLearn_SVC_model_C_4.pkl","rb"))
+modeloa_sci_nota = 0.9843 # Modeloa sortzean kalkulatu dugu
 
-# Honek ez badu funtzionatzen, ondorengo kodea exekutatu (ctrl + k + u, deskomentatzeko): 
+# Nire MODELOA:
+modeloa_nirea = pickle.load(open("Nire_SVC_modeloa_MNIST_iter10000.pkl","rb"))
+modeloa_nirea_info = pickle.load(open("Informazioa_10000.pkl","rb"))
+modeloa_nirea_nota = 0.9456
+print(modeloa_nirea_info)
+print(modeloa_nirea.koeficient)
+
+
+
+
+# Honek ez badu funtzionatzen, ondorengo kodea exekutatu modelo berri bat sortzeko
+# (ctrl + k + u, deskomentatzeko): 
 
 # modeloa = SVC(C = 4)
 # hasierako_denbora = time.time()
@@ -62,7 +76,6 @@ modeloa = pickle.load(open("SkLearn_SVC_model_C_4.pkl","rb"))
 # # izenak ez dira beharrezkoak aurresaterako garaian
 # amaierako_denbora = time.time()
 # print(f"Entrenatzeko beharrezko denbora: {amaierako_denbora-hasierako_denbora}s")
-
 
 
 
@@ -123,7 +136,7 @@ def digituak_garbitu(zenbakia,errenkada,zutabea):
         if 0 <= errenk < n and 0 <= zut < n:
             zenbakia[errenk][zut] = 0
 
-def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 4):
+def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 4,modelo_mota = "Scikit modeloa"):
     X = np.array(puntuak)
     Y = np.array(izenak)
     mean = np.mean(X,0)
@@ -131,14 +144,19 @@ def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 
     X = (X-mean)/sd
 
     X[:,1] = -X[:,1]
-    
-    if kernel_mota == "kernel gaussiarra":
-        model = SVC(C = koefizientea, kernel = "rbf")
-    elif kernel_mota == "kernel polinomiala":
-        model = SVC(C = koefizientea, kernel = "poly")
-    elif kernel_mota == "kernel lineala":
-        model = SVC(C = koefizientea, kernel = "linear")
+    print(f"INFO \n{kernel_mota},{modelo_mota}\n")
+    if modelo_mota == "Scikit modeloa":
+        if kernel_mota == "kernel gaussiarra":
+            model = SVC(C = koefizientea, kernel = "rbf")
+        elif kernel_mota == "kernel polinomiala":
+            model = SVC(C = koefizientea, kernel = "poly")
+        elif kernel_mota == "kernel lineala":
+            model = SVC(C = koefizientea, kernel = "linear")
+    else:
+        model = Nire_SGD_kernelekin(koeficient= koefizientea, kernel = kernel_mota)
 
+
+    #print(f"Modeloaren parametroak = \n{model.get_params()}")
     model.fit(X,Y)
 
     # Datuen minimo eta maximoak
@@ -147,7 +165,10 @@ def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 
     y_min, y_max = np.min(X[:, 1]) - 0.2, np.max(X[:, 1]) + 0.2
     xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
                      np.arange(y_min, y_max, h))
-    Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+    if modelo_mota == "Scikit modeloa":
+        Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+    else: 
+        Z = model.predict_anitzkoitza(np.c_[xx.ravel(), yy.ravel()])
     Z = Z.reshape(xx.shape)
 
     fig = go.Figure(data=go.Contour(
@@ -173,7 +194,8 @@ def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 
     fig.update_layout(
     xaxis_title=r'$x_1$',
     yaxis_title=r'$x_2$',
-    title=f'Modeloaren erabaki-gainazala: Kernel = {kernel_mota}, C = {koefizientea}, Modeloaren entrenamendu datuen errorea = {round(model.score(X,Y),3)}',
+    title=f'Modeloaren erabaki-gainazala <br><sup>Modelo mota = {modelo_mota}, Kernel = {kernel_mota}, C = {koefizientea}, Asmatze proportzioa = {round(model.score(X,Y),3)}</sup>',
+    
 )
     fig.show()
 
@@ -250,27 +272,40 @@ def predezitu():
     pygame.display.set_caption("Digituak predezitu")
 
     # Beharrezko hainbat aldagai
+    botoien_dist = height//10
     running = True
     marrazten = False
     garbitzen = False
     zenbakia = np.zeros((n,n),dtype=int)
     predikzioa = "1"
+    zein_modelo = "SciKit-Learn modeloa"
+    modeloaren_nota = modeloa_sci_nota
+
 
     # Textuak idazteko beharrezkoa:
     izenburua = pygame.font.Font(None, 37)
     digitua = pygame.font.Font(None, 300)
     instrukzioak = pygame.font.Font(None,20)
+    modelo_letrak = pygame.font.Font(None,25)
+    zein_modelo_font = pygame.font.Font(None,35)
+    oharra = pygame.font.Font(None,20)
 
     # Botoia:
     botoia_garbitu = Botoia(width - 230, 325, 170, 40, BUTTON_COLOR, "Garbitu")
     botoia_itzuli_menura = Botoia(width - 230, height - 50, 170, 40, BUTTON_COLOR, "Menura itzuli")
+    botoia_modeloa_aldatu = Botoia(width - 230, 325 + botoien_dist, 170, 40, BUTTON_COLOR, "Modeloz aldatu")
+    botoia_predezitu = Botoia(width - 230, 325 + 2*botoien_dist, 170, 40, BUTTON_COLOR, "Predezitu zenbakia")
+    
 
     # Loop orokorra
     while running:
         if np.array_equal(zenbakia,np.zeros((n,n),dtype=int)):
             predikzioa = "?"
-        else:
-            predikzioa = modeloa.predict(zenbakia.reshape((1,n**2)))[0]
+        elif zein_modelo == "SciKit-Learn modeloa":
+           predikzioa = modeloa_sci.predict(zenbakia.reshape((1,n**2)))[0]
+
+            # berria = zenbakia.reshape((1,n**2)) / 255
+            # predikzioa = modeloa_nirea.predict(berria.tolist()[0])
 
         for event in pygame.event.get():
             keys = pygame.key.get_pressed()
@@ -286,6 +321,17 @@ def predezitu():
                         zer_egin = "menua_ireki"
                     elif botoia_garbitu.rect.collidepoint(event.pos):
                         zenbakia = np.zeros((n,n))
+                    elif botoia_modeloa_aldatu.rect.collidepoint(event.pos):
+                        if zein_modelo == "SciKit-Learn modeloa":
+                            zein_modelo = "Nire modeloa"
+                            modeloaren_nota = modeloa_nirea_nota
+                            predikzioa = "?"
+                        else:
+                            zein_modelo = "SciKit-Learn modeloa"
+                            modeloaren_nota = modeloa_sci_nota
+                    elif botoia_predezitu.rect.collidepoint(event.pos) and zein_modelo == "Nire modeloa":
+                        berria = zenbakia.reshape((1,n**2)) / 255
+                        predikzioa = modeloa_nirea.predict(berria.tolist()[0])
                     else:    
                         marrazten = True
                         x,y = event.pos
@@ -321,8 +367,19 @@ def predezitu():
         screen.blit(izenburua.render("Modeloaren predikzioa", True, TEXT_COLOR),(width - 290, 20))
         screen.blit(digitua.render(str(predikzioa), True, BLACK),(width - 215, 80))
         screen.blit(instrukzioak.render("Sakatu 'enter' irudia garbitzeko", True, TEXT_COLOR),(width - 295, 55))
+        screen.blit(zein_modelo_font.render(zein_modelo, True, TEXT_COLOR),(width - 295, 250))
+        screen.blit(modelo_letrak.render(f"Modeloaren nota = %{modeloaren_nota}", True, TEXT_COLOR),(width - 295, 275))
+        
         botoia_itzuli_menura.draw(screen)
         botoia_garbitu.draw(screen)
+        botoia_modeloa_aldatu.draw(screen)
+        if zein_modelo == "Nire modeloa":
+            botoia_predezitu.draw(screen)
+            screen.blit(oharra.render("Nire modeloak denbora gehiago", True, RED),(width - 295, 290))
+            screen.blit(oharra.render("behar du predezitzeko", True, RED),(width - 295, 305))
+        else:
+            screen.blit(oharra.render("Scikit-learn modeloak automatikoki", True, RED),(width - 295, 290))
+            screen.blit(oharra.render("predezitzen du zenbakia", True, RED),(width - 295, 305))
         pygame.display.flip()
         
     return zer_egin
@@ -360,7 +417,8 @@ def SVM_bisuala():
     clock = pygame.time.Clock()
     delta_time = clock.tick(60) / 1000.0
     kernel_motak = ["kernel gaussiarra","kernel polinomiala","kernel lineala"]
-    modeloa = "kernel gaussiarra"
+    zein_kernel = "kernel gaussiarra"
+    zein_modelo = "Scikit modeloa"
     koefizientea = 1
 
     # Textuak idazteko beharrezkoa:
@@ -371,7 +429,7 @@ def SVM_bisuala():
     # Botoia:
     botoia_garbitu = Botoia(width - 230, height - 50 - 1 * botoien_distantzia, 170, 40, BUTTON_COLOR, "Garbitu")
     botoia_itzuli_menura = Botoia(width - 230, height - 50, 170, 40, BUTTON_COLOR, "Menura itzuli")
-    botoia_modeloa_sortu = Botoia(width - 230, height - 50 - 2 * botoien_distantzia, 170, 40, BUTTON_COLOR, "Modeloa sortu")
+    botoia_modeloz_aldatu = Botoia(width - 230, height - 50 - 2 * botoien_distantzia, 170, 40, BUTTON_COLOR, "Modeloz aldatu")
     botoia_kernel_mota = Botoia(width - 230, height - 50 - 3 * botoien_distantzia, 170, 40, BUTTON_COLOR, "Kernel mota")
 
     # Loop orokorra
@@ -384,7 +442,7 @@ def SVM_bisuala():
                 zer_egin = "amaitu"
             elif keys[pygame.K_RETURN]: # Enter botoia sakatzerakoan
                 if not(len(gorriak) == 0 or len(berdeak) == 0):
-                    modeloa_sortu(puntu_guztiak,izenak,modeloa,koefizientea)
+                    modeloa_sortu(puntu_guztiak,izenak,zein_kernel,koefizientea,modelo_mota=zein_modelo)
 
             elif event.type == pygame.MOUSEBUTTONDOWN: # Xaguaren botoiren bat sakatzen bada
                 if event.button == 1: # Ezkerreko botoia sakatzen bada
@@ -399,11 +457,13 @@ def SVM_bisuala():
                         puntu_guztiak = []
                     elif botoia_kernel_mota.rect.collidepoint(event.pos):
                         j += 1
-                        modeloa = kernel_motak[j % 3]
+                        zein_kernel = kernel_motak[j % 3]
                     
-                    elif botoia_modeloa_sortu.rect.collidepoint(event.pos):
-                        if not(len(gorriak) == 0 or len(berdeak) == 0):
-                            modeloa_sortu(puntu_guztiak,izenak,modeloa,koefizientea)
+                    elif botoia_modeloz_aldatu.rect.collidepoint(event.pos):
+                        if zein_modelo == "Scikit modeloa":
+                            zein_modelo = "Nire modeloa"
+                        else:
+                            zein_modelo = "Scikit modeloa"
 
                     else: # Puntu berdeak marrazteko   
                         marrazten = True
@@ -463,11 +523,12 @@ def SVM_bisuala():
         screen.blit(puntuak.render(f"Puntu berde kopurua = {len(berdeak)}", True, (0,100,0)),(width - 295, 175))
         screen.blit(puntuak.render(f"Puntu gorri kopurua = {len(gorriak)}", True, (100,0,0)),(width - 295, 195))
         screen.blit(puntuak.render(f"Modelo mota:", True, TEXT_COLOR),(width - 295, 215))
-        screen.blit(puntuak.render(modeloa, True, TEXT_COLOR),(width - 270, 235))
-        screen.blit(puntuak.render(f"C = {koefizientea}", True, TEXT_COLOR),(width - 270, 255))
+        screen.blit(puntuak.render(zein_modelo, True, TEXT_COLOR),(width - 270, 235))
+        screen.blit(puntuak.render(zein_kernel, True, TEXT_COLOR),(width - 270, 255))
+        screen.blit(puntuak.render(f"C = {koefizientea}", True, TEXT_COLOR),(width - 270, 275))
         botoia_itzuli_menura.draw(screen)
         botoia_garbitu.draw(screen)
-        botoia_modeloa_sortu.draw(screen)
+        botoia_modeloz_aldatu.draw(screen)
         botoia_kernel_mota.draw(screen)
 
         pygame.display.flip()
