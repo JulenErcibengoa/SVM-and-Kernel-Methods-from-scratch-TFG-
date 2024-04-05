@@ -55,6 +55,20 @@ Notak_matrizea_rbf = pickle.load(open("Notak_matrizea_rbf.pkl","rb"))
 Notak_matrizea_poly = pickle.load(open("Notak_matrizea_poly.pkl","rb"))
 print(f"INFORMAZIOA KARGATUTA: \n Noten matrizea kernel gaussiarra = \n{Notak_matrizea_rbf}\n Noten matrizea kernel polinomiala = \n{Notak_matrizea_poly}")
 
+plt.imshow(Notak_matrizea_rbf)
+plt.xticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
+plt.xlabel("gamma")
+plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
+plt.ylabel("C", rotation = 0)
+plt.title("Modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel gaussiarra")
+plt.colorbar(label='Asmatutako proportzioa')
+plt.tight_layout(pad = 0.2)
+for i in range(Notak_matrizea_rbf.shape[0]):
+    for j in range(Notak_matrizea_rbf.shape[1]):
+        plt.text(j, i, '{:.3f}'.format(Notak_matrizea_rbf[i, j]), ha='center', va='center', color='white' if Notak_matrizea_rbf[i, j] < 0.5 else "black")
+plt.show()
+
+
 
 # ----------------------------------------------------------------------------
 # ----------------------------------------------------------------------------
@@ -116,19 +130,19 @@ for i,C in enumerate(C_parametroak):
 
 
 # ------------------------------GRAFIKOA EGIN---------------------------------
-Notak_matrizea_rbf = pickle.load(open("Notak_matrizea_rbf.pkl","rb"))
-plt.imshow(Notak_matrizea_rbf)
-plt.xticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
-plt.xlabel("gamma")
-plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
-plt.ylabel("C", rotation = 0)
-plt.title("Modelo desberdinen erroreak baliozta-multzoan:\nKernel gaussiarra")
-plt.colorbar(label='Asmatutako proportzioa')
-plt.tight_layout(pad = 0.2)
-for i in range(Notak_matrizea_rbf.shape[0]):
-    for j in range(Notak_matrizea_rbf.shape[1]):
-        plt.text(j, i, '{:.2f}'.format(Notak_matrizea_rbf[i, j]), ha='center', va='center', color='white' if Notak_matrizea_rbf[i, j] < 0.7 else "black")
-plt.show()
+# Notak_matrizea_rbf = pickle.load(open("Notak_matrizea_rbf.pkl","rb"))
+# plt.imshow(Notak_matrizea_rbf)
+# plt.xticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
+# plt.xlabel("gamma")
+# plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
+# plt.ylabel("C", rotation = 0)
+# plt.title("Modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel gaussiarra")
+# plt.colorbar(label='Asmatutako proportzioa')
+# plt.tight_layout(pad = 0.2)
+# for i in range(Notak_matrizea_rbf.shape[0]):
+#     for j in range(Notak_matrizea_rbf.shape[1]):
+#         plt.text(j, i, '{:.3f}'.format(Notak_matrizea_rbf[i, j]), ha='center', va='center', color='white' if Notak_matrizea_rbf[i, j] < 0.5 else "black")
+# plt.show()
 
 
 
@@ -147,20 +161,20 @@ plt.show()
 # ----------------------------KERNEL POLINOMIALA------------------------------
 # ----------------------------------------------------------------------------
         
-with open('Modeloen_notak.txt', 'a') as informazioa:
-    informazioa.write("\n\nScikit-Learn modelo desberdinak, kernel polinomiala\n\n")
+# with open('Modeloen_notak.txt', 'a') as informazioa:
+#     informazioa.write("\n\nScikit-Learn modelo desberdinak, kernel polinomiala\n\n")
 
-# Parametroak:
-C_parametroak = np.logspace(-3, 3, 7)  # Desde 0.01 hasta 1000, con 7 valores en escala logarítmica
-maila_desberdinak = [1,2,3,5,7,9,11]
+# # Parametroak:
+# C_parametroak = np.logspace(-3, 3, 7)  # Desde 0.01 hasta 1000, con 7 valores en escala logarítmica
+# maila_desberdinak = [1,2,3,5,7,9,11]
 
-# Entrenatu (entrenamendua geldi daiteke, baina goiko kodea komentatu egin behar da berriro hasterakoan entrenatzen,
-# bestela informazioa galdu egingo da)
-for i,C in enumerate(C_parametroak):
-    for j,d in enumerate(maila_desberdinak):
-        Notak_matrizea_poly = pickle.load(open("Notak_matrizea_rbf.pkl","rb"))
-        entrenatu(C,d,"poly",i,j,Notak_matrizea_poly)
-        pickle.dump(Notak_matrizea_poly,open("Notak_matrizea_rbf.pkl","wb"))
+# # Entrenatu (entrenamendua geldi daiteke, baina goiko kodea komentatu egin behar da berriro hasterakoan entrenatzen,
+# # bestela informazioa galdu egingo da)
+# for i,C in enumerate(C_parametroak):
+#     for j,d in enumerate(maila_desberdinak):
+#         Notak_matrizea_poly = pickle.load(open("Notak_matrizea_rbf.pkl","rb"))
+#         entrenatu(C,d,"poly",i,j,Notak_matrizea_poly)
+#         pickle.dump(Notak_matrizea_poly,open("Notak_matrizea_rbf.pkl","wb"))
 
 
 
