@@ -21,6 +21,11 @@ X_test = testeatzeko_datuak.iloc[:,1:]
 Y_test = testeatzeko_datuak["label"]
 X_entrenamendu = X_entrenamendu / 255
 X_test = X_test / 255
+print("Entrenamenduko klaseen agertze proportzioa:")
+print(Y_entrenamendu.value_counts()/len(Y_entrenamendu))
+print()
+print("Testeko klaseen agertze proportzioa:")
+print(Y_test.value_counts()/len(Y_test))
 # ----------------------------------------------------------------------------
 # ----------------------------------------------------------------------------
 # ----------------------------------------------------------------------------
