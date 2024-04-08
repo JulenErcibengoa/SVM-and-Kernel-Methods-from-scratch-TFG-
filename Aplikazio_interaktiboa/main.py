@@ -110,7 +110,7 @@ def kuadrikula_marraztu(kuadrikula,screen):
     for i in range(n):
         for j in range(n):
             balioa = kuadrikula[i][j]
-            pygame.draw.rect(screen, (balioa,balioa,balioa), (j * grid_size, i * grid_size, grid_size, grid_size))
+            pygame.draw.rect(screen, (255-balioa,255-balioa,255-balioa), (j * grid_size, i * grid_size, grid_size, grid_size))
             pygame.draw.rect(screen, GRID_COLOR, (j * grid_size, i * grid_size, grid_size, grid_size), 1) # 1 Balioa da
             # karratuaren zenbat betetzen den definitzeko, 0 da "default" balioa eta karratu osoa betetzen du.
 
