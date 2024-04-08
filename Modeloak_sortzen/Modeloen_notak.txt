@@ -40,3 +40,74 @@ Scikit-Learn modelo desberdinak, kernel gaussiarra
 (i,j) = (5,2), C = 100.0, gamma = 0.1 --> Nota = 0.957
 (i,j) = (5,3), C = 100.0, gamma = 1.0 --> Nota = 0.1765
 (i,j) = (5,4), C = 100.0, gamma = 10.0 --> Nota = 0.1135
+(i,j) = (5,5), C = 100.0, gamma = 100.0 --> Nota = 0.1135
+(i,j) = (5,6), C = 100.0, gamma = 1000.0 --> Nota = 0.1135
+(i,j) = (6,0), C = 1000.0, gamma = 0.001 --> Nota = 0.9739
+(i,j) = (6,1), C = 1000.0, gamma = 0.01 --> Nota = 0.9824
+(i,j) = (6,2), C = 1000.0, gamma = 0.1 --> Nota = 0.957
+(i,j) = (6,3), C = 1000.0, gamma = 1.0 --> Nota = 0.1765
+(i,j) = (6,4), C = 1000.0, gamma = 10.0 --> Nota = 0.1135
+(i,j) = (6,5), C = 1000.0, gamma = 100.0 --> Nota = 0.1135
+(i,j) = (6,6), C = 1000.0, gamma = 1000.0 --> Nota = 0.1135
+
+
+Scikit-Learn modelo desberdinak, kernel polinomiala
+
+(i,j) = (0,0), C = 0.001, maila = 2 --> Nota = 0.8773
+(i,j) = (0,1), C = 0.001, maila = 3 --> Nota = 0.9088
+(i,j) = (0,2), C = 0.001, maila = 4 --> Nota = 0.9297
+(i,j) = (0,3), C = 0.001, maila = 5 --> Nota = 0.9448
+(i,j) = (0,4), C = 0.001, maila = 6 --> Nota = 0.9549
+(i,j) = (0,5), C = 0.001, maila = 7 --> Nota = 0.963
+(i,j) = (0,6), C = 0.001, maila = 8 --> Nota = 0.9686
+(i,j) = (1,0), C = 0.01, maila = 2 --> Nota = 0.9317
+(i,j) = (1,1), C = 0.01, maila = 3 --> Nota = 0.9508
+(i,j) = (1,2), C = 0.01, maila = 4 --> Nota = 0.9632
+(i,j) = (1,3), C = 0.01, maila = 5 --> Nota = 0.972
+(i,j) = (1,4), C = 0.01, maila = 6 --> Nota = 0.9772
+(i,j) = (1,5), C = 0.01, maila = 7 --> Nota = 0.9786
+(i,j) = (1,6), C = 0.01, maila = 8 --> Nota = 0.979
+(i,j) = (2,0), C = 0.1, maila = 2 --> Nota = 0.9596
+(i,j) = (2,1), C = 0.1, maila = 3 --> Nota = 0.9732
+(i,j) = (2,2), C = 0.1, maila = 4 --> Nota = 0.9801
+(i,j) = (2,3), C = 0.1, maila = 5 --> Nota = 0.9818
+(i,j) = (2,4), C = 0.1, maila = 6 --> Nota = 0.9819
+(i,j) = (2,5), C = 0.1, maila = 7 --> Nota = 0.9815
+(i,j) = (2,6), C = 0.1, maila = 8 --> Nota = 0.9803
+(i,j) = (3,0), C = 1.0, maila = 2 --> Nota = 0.9766
+(i,j) = (3,1), C = 1.0, maila = 3 --> Nota = 0.9813
+(i,j) = (3,2), C = 1.0, maila = 4 --> Nota = 0.9822
+(i,j) = (3,3), C = 1.0, maila = 5 --> Nota = 0.9826
+(i,j) = (3,4), C = 1.0, maila = 6 --> Nota = 0.9827
+(i,j) = (3,5), C = 1.0, maila = 7 --> Nota = 0.9816
+(i,j) = (3,6), C = 1.0, maila = 8 --> Nota = 0.9803
+(i,j) = (4,0), C = 10.0, maila = 2 --> Nota = 0.9797
+(i,j) = (4,1), C = 10.0, maila = 3 --> Nota = 0.9811
+(i,j) = (4,2), C = 10.0, maila = 4 --> Nota = 0.9824
+(i,j) = (4,3), C = 10.0, maila = 5 --> Nota = 0.9825
+(i,j) = (4,4), C = 10.0, maila = 6 --> Nota = 0.9827
+(i,j) = (4,5), C = 10.0, maila = 7 --> Nota = 0.9816
+(i,j) = (4,6), C = 10.0, maila = 8 --> Nota = 0.9803
+(i,j) = (5,0), C = 100.0, maila = 2 --> Nota = 0.9797
+(i,j) = (5,1), C = 100.0, maila = 3 --> Nota = 0.9811
+(i,j) = (5,2), C = 100.0, maila = 4 --> Nota = 0.9824
+(i,j) = (5,3), C = 100.0, maila = 5 --> Nota = 0.9825
+(i,j) = (5,4), C = 100.0, maila = 6 --> Nota = 0.9827
+(i,j) = (5,5), C = 100.0, maila = 7 --> Nota = 0.9816
+(i,j) = (5,6), C = 100.0, maila = 8 --> Nota = 0.9803
+(i,j) = (6,0), C = 1000.0, maila = 2 --> Nota = 0.9797
+(i,j) = (6,1), C = 1000.0, maila = 3 --> Nota = 0.9811
+(i,j) = (6,2), C = 1000.0, maila = 4 --> Nota = 0.9824
+(i,j) = (6,3), C = 1000.0, maila = 5 --> Nota = 0.9825
+(i,j) = (6,4), C = 1000.0, maila = 6 --> Nota = 0.9827
+(i,j) = (6,5), C = 1000.0, maila = 7 --> Nota = 0.9816
+(i,j) = (6,6), C = 1000.0, maila = 8 --> Nota = 0.9803
+
+
+Scikit-Learn modelo desberdinak, kernel polinomiala: bertsio handitua
+
+(i,j) = (0,0), C = 1e-10, maila = 2 --> Nota = 0.1135
+(i,j) = (0,1), C = 1e-10, maila = 3 --> Nota = 0.1135
+(i,j) = (0,2), C = 1e-10, maila = 4 --> Nota = 0.1135
+(i,j) = (0,3), C = 1e-10, maila = 5 --> Nota = 0.1135
+(i,j) = (0,4), C = 1e-10, maila = 6 --> Nota = 0.1135

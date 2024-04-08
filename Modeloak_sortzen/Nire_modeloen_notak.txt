@@ -1,0 +1,4 @@
+Nire modelo desberdinak, kernel gaussiarra
+
+(i,j) = (0,0), C = 0.001, gamma = 0.001 --> Nota = 0.0981
+(i,j) = (0,1), C = 0.001, gamma = 0.01 --> Nota = 0.2239

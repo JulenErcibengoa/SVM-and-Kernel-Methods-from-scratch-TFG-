@@ -2,29 +2,28 @@ import random
 import numpy as np
 import math
 
-# print(1/(2*2.0663e-07))
-
-def polynomial_kernel(xi,xj,deg = 2):
+def polynomial_kernel(xi,xj,deg = 2,sigma = 0.1):
     return (np.dot(xi,xj) + 1)**deg
 
-# leheno sigma = 0.1
-def gaussian_kernel(xi,xj,sigma = 100):
+def gaussian_kernel(xi,xj,sigma = 0.1,deg = 2):
     return math.exp( (-1) * (np.dot(xi-xj,xi-xj))/ (2*sigma) )
 
-def linear_kernel(xi,xj, k = 0):
-    return np.dot(xi,xj) + k
+def linear_kernel(xi,xj,sigma = 0.1,deg = 2):
+    return np.dot(xi,xj)
 
 class Nire_SGD_kernelekin:
-    def __init__(self,koeficient,kernel):
+    def __init__(self,koeficient,kernel,sigma = 0.1,deg = 2):
         self.entrenatuta = False
         self.klaseanitz = False
         self.alpha = None # Modeloaren entrenatu ondorengo aldagaiak hemen egongo dira
         self.X = None
         self.Y_bakarrak = None
         self.m = None
-        self.koeficient = 1 / koeficient # Scikit-Learn paketearen baliokidea izateko
-        self.nota = 0
-        
+        self.koeficient = koeficient 
+        self.sigma = sigma
+        self.deg = deg
+
+
         # Kernel aukeraketa:
         if kernel == "kernel gaussiarra":
             self.kernel = gaussian_kernel
@@ -37,7 +36,7 @@ class Nire_SGD_kernelekin:
             self.kernel = gaussian_kernel
 
     def kernelak_kalkulatu(self,x):
-        return [self.kernel(xi,x) for xi in self.X]
+        return [self.kernel(xi,x,deg = self.deg, sigma = self.sigma) for xi in self.X]
         
     def fit(self,X,Y,iter = 10000):
         """
@@ -72,7 +71,6 @@ class Nire_SGD_kernelekin:
             Y_desberdinak = []
             for izena in self.Y_bakarrak:
                 Y_desberdinak.append([1 if elementua == izena else -1 for elementua in Y])
-            
             r = 0
             for Y_desb in Y_desberdinak:
                 # Entrenatu (goiko kode berdina)
@@ -90,10 +88,9 @@ class Nire_SGD_kernelekin:
                         beta[t+1,i] = beta[t,i]
                 self.alpha.append((1/T) * np.sum(alpha,0))
                 r+=1
-                print(f"Fitted class number {r} of {len(self.Y_bakarrak)}")
-            
+                print(f"{r}/{len(self.Y_bakarrak)} klase entrenatuta")
         self.entrenatuta = True
-        print("Fitted!")
+        print("Entrenamendua amaituta!")
 
     def predict(self,x):
         """
@@ -112,6 +109,12 @@ class Nire_SGD_kernelekin:
             return self.Y_bakarrak[np.argmax(balioak)]
         else:
             print("Modeloa oraindik ez da entrenatu")
+    
+    def predict_anitzkoitza(self,x_multzoa):
+        labels = np.zeros(len(x_multzoa))
+        for i,x in enumerate(x_multzoa):
+            labels[i] = self.predict(x)
+        return labels
 
     def score(self,X,Y):
         """
@@ -123,8 +126,6 @@ class Nire_SGD_kernelekin:
             for i,bektore in enumerate(X):
                 if self.predict(bektore) == Y[i]:
                     klasifikazio_zuzen_kopurua += 1
-                print(i)
-            self.nota = klasifikazio_zuzen_kopurua / m
-            return self.nota
+            return klasifikazio_zuzen_kopurua / m
         print("Modeloa oraindik ez da entrenatu")
 
