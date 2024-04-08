@@ -368,7 +368,7 @@ def predezitu():
         screen.blit(digitua.render(str(predikzioa), True, BLACK),(width - 215, 80))
         screen.blit(instrukzioak.render("Sakatu 'enter' irudia garbitzeko", True, TEXT_COLOR),(width - 295, 55))
         screen.blit(zein_modelo_font.render(zein_modelo, True, TEXT_COLOR),(width - 295, 250))
-        screen.blit(modelo_letrak.render(f"Modeloaren nota = %{modeloaren_nota}", True, TEXT_COLOR),(width - 295, 275))
+        screen.blit(modelo_letrak.render(f"Modeloaren nota = {modeloaren_nota}", True, TEXT_COLOR),(width - 295, 275))
         
         botoia_itzuli_menura.draw(screen)
         botoia_garbitu.draw(screen)
