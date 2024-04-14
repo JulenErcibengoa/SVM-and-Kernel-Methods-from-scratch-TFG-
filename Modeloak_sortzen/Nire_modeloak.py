@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import pickle
 import matplotlib.pyplot as plt
+import random
 
 
 
@@ -34,15 +35,20 @@ print()
 
 
 
+
+
+
 # ----------------------------------------------------------------------------
 # -----INFORMAZIOA GORDETZEKO LEKUAK SORTU (LEHENENGO ALDIZ EJEKUTATZEAN)-----
 # ----------------------------------------------------------------------------
 # Hau lehenengo aldiz exekutatzean bakarrik exekutatu, bestela informazioa galdu egingo da
 
 # Notak_matrizea_Nire_rbf = np.zeros((7,7))
+# Notak_matrizea_Nire_rbf_handitua = np.zeros((14,7))
 # Notak_matrizea_Nire_poly = np.zeros((7,7))
 
 # pickle.dump(Notak_matrizea_Nire_rbf,open("Notak_matrizea_Nire_rbf.pkl","wb"))
+# pickle.dump(Notak_matrizea_Nire_rbf_handitua,open("Notak_matrizea_Nire_rbf_handitua.pkl","wb"))
 # pickle.dump(Notak_matrizea_Nire_poly,open("Notak_matrizea_Nire_poly.pkl","wb"))
 
 # with open('Nire_modeloen_notak.txt', 'w') as informazioa:
@@ -61,14 +67,17 @@ print()
 # ----------------------------------------------------------------------------
 
 Notak_matrizea_Nire_rbf = pickle.load(open("Notak_matrizea_Nire_rbf.pkl","rb"))
+Notak_matrizea_Nire_rbf_handitua = pickle.load(open("Notak_matrizea_Nire_rbf_handitua.pkl","rb"))
+# Notak_matrizea_Nire_rbf_handitua[7:,:] = Notak_matrizea_Nire_rbf
+# pickle.dump(Notak_matrizea_Nire_rbf_handitua,open("Notak_matrizea_Nire_rbf_handitua.pkl","wb"))
 Notak_matrizea_Nire_poly = pickle.load(open("Notak_matrizea_Nire_poly.pkl","rb"))
-print(f"INFORMAZIOA KARGATUTA: \n\n Noten matrizea kernel gaussiarra = \n{Notak_matrizea_Nire_rbf}\n\n Noten matrizea kernel polinomiala = \n{Notak_matrizea_Nire_poly}\n\n")
+print(f"INFORMAZIOA KARGATUTA: \n\n Noten matrizea kernel gaussiarra = \n{Notak_matrizea_Nire_rbf}\n\n Noten matrizea kernel gaussiarra handitua = \n{Notak_matrizea_Nire_rbf_handitua}\n\n Noten matrizea kernel polinomiala = \n{Notak_matrizea_Nire_poly}\n\n")
 
 
-
+# Grafikoa RBF
 plt.imshow(Notak_matrizea_Nire_rbf)
 plt.xticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
-plt.xlabel("sigma")
+plt.xlabel(r"$\sigma$")
 plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
 plt.ylabel("C", rotation = 0)
 plt.title("Nire modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel gaussiarra 1000 iteraziorekin klase bakoitzerako")
@@ -77,11 +86,27 @@ plt.clim(0,1)
 plt.tight_layout(pad = 0.2)
 for i in range(Notak_matrizea_Nire_rbf.shape[0]):
     for j in range(Notak_matrizea_Nire_rbf.shape[1]):
-        plt.text(j, i, '{:.3f}'.format(Notak_matrizea_Nire_rbf[i, j]), ha='center', va='center', color='white' if Notak_matrizea_Nire_rbf[i, j] < 0.5 else "black")
+        plt.text(j, i, '{:.4f}'.format(Notak_matrizea_Nire_rbf[i, j]), ha='center', va='center', color='white' if Notak_matrizea_Nire_rbf[i, j] < 0.5 else "black")
 plt.show()
 
 
+# Grafikoa RBF handitua
+plt.imshow(Notak_matrizea_Nire_rbf_handitua)
+plt.xticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
+plt.xlabel(r"$\sigma$")
+plt.yticks(np.arange(0, 14, 1), [r'$10^{{{}}}$'.format(j) for j in [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3]])
+plt.ylabel("C", rotation = 0)
+plt.title("Nire modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel gaussiarra 1000 iteraziorekin klase bakoitzerako, bertsio handitua")
+plt.colorbar(label='Asmatutako proportzioa')
+plt.clim(0,1)
+plt.tight_layout(pad = 0.2)
+# for i in range(Notak_matrizea_Nire_rbf_handitua.shape[0]):
+#     for j in range(Notak_matrizea_Nire_rbf_handitua.shape[1]):
+#         plt.text(j, i, '{:.2f}'.format(Notak_matrizea_Nire_rbf_handitua[i, j]), ha='center', va='center', color='white' if Notak_matrizea_Nire_rbf_handitua[i, j] < 0.5 else "black")
+plt.show()
 
+
+# Grafikoa kernel polinomiala
 plt.imshow(Notak_matrizea_Nire_poly)
 plt.xticks(np.arange(0, 7, 1), [2,3,4,5,6,7,8])
 plt.xlabel("polinomioaren maila")
@@ -93,7 +118,7 @@ plt.clim(0,1)
 plt.tight_layout(pad = 0.2)
 for i in range(Notak_matrizea_Nire_poly.shape[0]):
     for j in range(Notak_matrizea_Nire_poly.shape[1]):
-        plt.text(j, i, '{:.3f}'.format(Notak_matrizea_Nire_poly[i, j]), ha='center', va='center', color='white' if Notak_matrizea_Nire_poly[i, j] < 0.5 else "black")
+        plt.text(j, i, '{:.4f}'.format(Notak_matrizea_Nire_poly[i, j]), ha='center', va='center', color='white' if Notak_matrizea_Nire_poly[i, j] < 0.5 else "black")
 plt.show()
 
 
@@ -112,8 +137,8 @@ def entrenatu (C,param,kernela,i,j,Nota_matrizea):
     if kernela == "rbf":
         if Nota_matrizea[i,j] == 0:
             print(f"Hasi da ({i},{j}) posizioa, C = {C}, sigma = {param}")
-
             modeloa = Nire_SGD_kernelekin(koeficient=C,kernel="kernel gaussiarra",sigma=param)
+            random.seed(123)
             modeloa.fit(X_entrenamendu.values,Y_entrenamendu.values,iter=1000)
             nota = modeloa.score(X_test.values,Y_test.values)
             Nota_matrizea[i][j] = nota
@@ -130,6 +155,7 @@ def entrenatu (C,param,kernela,i,j,Nota_matrizea):
             print(f"Hasi da ({i},{j}) posizioa, C = {C}, maila = {param}")
 
             modeloa = Nire_SGD_kernelekin(koeficient=C,kernel="kernel polinomiala",deg=param)
+            random.seed(123)
             modeloa.fit(X_entrenamendu.values,Y_entrenamendu.values,iter = 1000)
             nota = modeloa.score(X_test.values,Y_test.values)
             Nota_matrizea[i][j] = nota
@@ -161,25 +187,27 @@ for i,C in enumerate(C_parametroak):
         pickle.dump(Notak_matrizea_Nire_rbf,open("Notak_matrizea_Nire_rbf.pkl","wb"))
 
 
-# ------------------------------GRAFIKOA EGIN---------------------------------
-Notak_matrizea_Nire_rbf = pickle.load(open("Notak_matrizea_Nire_rbf.pkl","rb"))
-plt.imshow(Notak_matrizea_Nire_rbf)
-plt.xticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
-plt.xlabel("sigma")
-plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
-plt.ylabel("C", rotation = 0)
-plt.title("Nire modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel gaussiarra")
-plt.colorbar(label='Asmatutako proportzioa')
-plt.clim(0,1)
-plt.tight_layout(pad = 0.2)
-for i in range(Notak_matrizea_Nire_rbf.shape[0]):
-    for j in range(Notak_matrizea_Nire_rbf.shape[1]):
-        plt.text(j, i, '{:.3f}'.format(Notak_matrizea_Nire_rbf[i, j]), ha='center', va='center', color='white' if Notak_matrizea_Nire_rbf[i, j] < 0.5 else "black")
-plt.show()
 
+# ----------------------------------------------------------------------------
+# -------------------KERNEL GAUSSIARRA MATRIZE HANDITUA-----------------------
+# ----------------------------------------------------------------------------
 
+# with open('Nire_modeloen_notak.txt', 'a') as informazioa:
+#     informazioa.write("\n\nNire modelo desberdinak, kernel gaussiarra, bertsio handitua\n\n")
 
+# Parametroak:
+C_parametroak = np.logspace(-10, 3, 14) 
+gamma_parametroak = np.logspace(-3, 3, 7)
 
+print(Notak_matrizea_Nire_rbf_handitua)
+# Entrenatu (entrenamendua geldi daiteke, baina goiko kodea komentatu egin behar da berriro hasterakoan entrenatzen,
+# bestela informazioa galdu egingo da)
+for i in  range(len(C_parametroak)-1,-1,-1):
+    C = C_parametroak[i]
+    for j,gamma in enumerate(gamma_parametroak):
+        Notak_matrizea_Nire_rbf_handitua = pickle.load(open("Notak_matrizea_Nire_rbf_handitua.pkl","rb"))
+        entrenatu(C,gamma,"rbf",i,j,Notak_matrizea_Nire_rbf_handitua)
+        pickle.dump(Notak_matrizea_Nire_rbf_handitua,open("Notak_matrizea_Nire_rbf_handitua.pkl","wb"))
 
 
 
@@ -202,19 +230,3 @@ for i,C in enumerate(C_parametroak):
         entrenatu(C,d,"poly",i,j,Notak_matrizea_Nire_poly)
         pickle.dump(Notak_matrizea_Nire_poly,open("Notak_matrizea_Nire_poly.pkl","wb"))
 
-
-# ------------------------------GRAFIKOA EGIN---------------------------------
-Notak_matrizea_Nire_poly = pickle.load(open("Notak_matrizea_Nire_poly.pkl","rb"))
-plt.imshow(Notak_matrizea_Nire_poly)
-plt.xticks(np.arange(0, 7, 1), [2,3,4,5,6,7,8])
-plt.xlabel("polinomioaren maila")
-plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
-plt.ylabel("C", rotation = 0)
-plt.title("Nire modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel polinomiala")
-plt.colorbar(label='Asmatutako proportzioa')
-plt.clim(0,1)
-plt.tight_layout(pad = 0.2)
-for i in range(Notak_matrizea_Nire_poly.shape[0]):
-    for j in range(Notak_matrizea_Nire_poly.shape[1]):
-        plt.text(j, i, '{:.3f}'.format(Notak_matrizea_Nire_poly[i, j]), ha='center', va='center', color='white' if Notak_matrizea_Nire_poly[i, j] < 0.5 else "black")
-plt.show()

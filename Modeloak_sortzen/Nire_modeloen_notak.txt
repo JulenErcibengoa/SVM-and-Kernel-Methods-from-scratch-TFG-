@@ -53,3 +53,22 @@ Nire modelo desberdinak, kernel gaussiarra
 
 Nire modelo desberdinak, kernel gaussiarra, bertsio handitua
 
+(i,j) = (0,0), C = 0.001, sigma = 0.001 --> Nota = 0.0982
+(i,j) = (0,1), C = 0.001, sigma = 0.01 --> Nota = 0.2232
+(i,j) = (0,2), C = 0.001, sigma = 0.1 --> Nota = 0.8788
+(i,j) = (0,3), C = 0.001, sigma = 1.0 --> Nota = 0.8808
+(i,j) = (0,4), C = 0.001, sigma = 10.0 --> Nota = 0.8992
+(i,j) = (0,5), C = 0.001, sigma = 100.0 --> Nota = 0.7889
+(i,j) = (0,6), C = 0.001, sigma = 1000.0 --> Nota = 0.3481
+(i,j) = (6,0), C = 0.0001, sigma = 0.001 --> Nota = 0.0982
+(i,j) = (6,1), C = 0.0001, sigma = 0.01 --> Nota = 0.2232
+(i,j) = (6,2), C = 0.0001, sigma = 0.1 --> Nota = 0.8788
+(i,j) = (6,3), C = 0.0001, sigma = 1.0 --> Nota = 0.8812
+(i,j) = (6,4), C = 0.0001, sigma = 10.0 --> Nota = 0.888
+(i,j) = (6,5), C = 0.0001, sigma = 100.0 --> Nota = 0.6989
+(i,j) = (6,6), C = 0.0001, sigma = 1000.0 --> Nota = 0.359
+(i,j) = (5,0), C = 1e-05, sigma = 0.001 --> Nota = 0.0982
+(i,j) = (5,1), C = 1e-05, sigma = 0.01 --> Nota = 0.2232
+(i,j) = (5,2), C = 1e-05, sigma = 0.1 --> Nota = 0.8788
+(i,j) = (5,3), C = 1e-05, sigma = 1.0 --> Nota = 0.8828
+(i,j) = (5,4), C = 1e-05, sigma = 10.0 --> Nota = 0.8549
