@@ -68,7 +68,45 @@ print(f"INFORMAZIOA KARGATUTA: \n\n Noten matrizea kernel gaussiarra = \n{Notak_
 # Notak_matrizea_poly_handia[7:14,0:7] = Notak_matrizea_poly
 # pickle.dump(Notak_matrizea_poly_handia,open("Notak_matrizea_poly_handia.pkl","wb"))
 
-plt.imshow(Notak_matrizea_poly_handia)
+
+# Grafikoa RBF:
+plt.figure(figsize=(10, 5))
+plt.imshow(Notak_matrizea_rbf, aspect= "auto")
+plt.xticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
+plt.xlabel(r"$\gamma$")
+plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
+plt.ylabel("C", rotation = 0)
+# plt.title("Modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel gaussiarra")
+plt.colorbar(label='Asmatutako proportzioa')
+plt.clim(0,1)
+plt.tight_layout(pad = 0.2)
+for i in range(Notak_matrizea_rbf.shape[0]):
+    for j in range(Notak_matrizea_rbf.shape[1]):
+        plt.text(j, i, '{:.4f}'.format(Notak_matrizea_rbf[i, j]), ha='center', va='center', color='white' if Notak_matrizea_rbf[i, j] < 0.5 else "black", fontsize = 12)
+plt.show()
+
+
+# Grafikoa poly
+plt.figure(figsize = (10,5))
+plt.imshow(Notak_matrizea_poly, aspect= "auto")
+plt.xticks(np.arange(0, 7, 1), [2,3,4,5,6,7,8])
+plt.xlabel("polinomioaren maila")
+plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
+plt.ylabel("C", rotation = 0)
+# plt.title("Modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel polinomiala")
+plt.colorbar(label='Asmatutako proportzioa')
+plt.clim(0,1)
+plt.tight_layout(pad = 0.2)
+for i in range(Notak_matrizea_poly.shape[0]):
+    for j in range(Notak_matrizea_poly.shape[1]):
+        plt.text(j, i, '{:.4f}'.format(Notak_matrizea_poly[i, j]), ha='center', va='center', color='white' if Notak_matrizea_poly[i, j] < 0.5 else "black", fontsize = 12)
+plt.show()
+
+
+# Grafikoa poly handitua
+
+plt.figure(figsize=(10, 5))
+plt.imshow(Notak_matrizea_poly_handia, aspect = "auto")
 plt.xticks(np.arange(0, 19, 1), [i for i in range(2,21)])
 plt.xlabel("polinomioaren maila")
 plt.yticks(np.arange(0, 21, 1), [r'$10^{{{}}}$'.format(j) for j in range(-10,11)])
@@ -141,33 +179,6 @@ for i,C in enumerate(C_parametroak):
         pickle.dump(Notak_matrizea_rbf,open("Notak_matrizea_rbf.pkl","wb"))
 
 
-# ------------------------------GRAFIKOA EGIN---------------------------------
-Notak_matrizea_rbf = pickle.load(open("Notak_matrizea_rbf.pkl","rb"))
-plt.imshow(Notak_matrizea_rbf)
-plt.xticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
-plt.xlabel("gamma")
-plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
-plt.ylabel("C", rotation = 0)
-plt.title("Modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel gaussiarra")
-plt.colorbar(label='Asmatutako proportzioa')
-plt.clim(0,1)
-plt.tight_layout(pad = 0.2)
-for i in range(Notak_matrizea_rbf.shape[0]):
-    for j in range(Notak_matrizea_rbf.shape[1]):
-        plt.text(j, i, '{:.3f}'.format(Notak_matrizea_rbf[i, j]), ha='center', va='center', color='white' if Notak_matrizea_rbf[i, j] < 0.5 else "black")
-plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # ----------------------------------------------------------------------------
@@ -188,27 +199,6 @@ for i,C in enumerate(C_parametroak):
         Notak_matrizea_poly = pickle.load(open("Notak_matrizea_poly.pkl","rb"))
         entrenatu(C,d,"poly",i,j,Notak_matrizea_poly)
         pickle.dump(Notak_matrizea_poly,open("Notak_matrizea_poly.pkl","wb"))
-
-
-# ------------------------------GRAFIKOA EGIN---------------------------------
-Notak_matrizea_poly = pickle.load(open("Notak_matrizea_poly.pkl","rb"))
-plt.imshow(Notak_matrizea_poly)
-plt.xticks(np.arange(0, 7, 1), [2,3,4,5,6,7,8])
-plt.xlabel("polinomioaren maila")
-plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
-plt.ylabel("C", rotation = 0)
-plt.title("Modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel polinomiala")
-plt.colorbar(label='Asmatutako proportzioa')
-plt.clim(0,1)
-plt.tight_layout(pad = 0.2)
-for i in range(Notak_matrizea_poly.shape[0]):
-    for j in range(Notak_matrizea_poly.shape[1]):
-        plt.text(j, i, '{:.3f}'.format(Notak_matrizea_poly[i, j]), ha='center', va='center', color='white' if Notak_matrizea_poly[i, j] < 0.5 else "black")
-plt.show()
-
-
-
-
 
 
 
