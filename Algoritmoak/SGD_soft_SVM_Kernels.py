@@ -6,7 +6,7 @@ def polynomial_kernel(xi,xj,deg = 2,sigma = 0.1):
     return (np.dot(xi,xj) + 1)**deg
 
 def gaussian_kernel(xi,xj,sigma = 0.1,deg = 2):
-    return math.exp( (-1) * (np.dot(xi-xj,xi-xj))/ (2*sigma) )
+    return np.exp( (-1) * (np.dot(xi-xj,xi-xj))/ (2*sigma) )
 
 def linear_kernel(xi,xj,sigma = 0.1,deg = 2):
     return np.dot(xi,xj)

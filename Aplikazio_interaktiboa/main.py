@@ -1,3 +1,10 @@
+import sys
+import os
+
+oraingo_bidea = os.path.dirname(os.path.realpath(__file__))
+bide_orokorra = os.path.dirname(oraingo_bidea)
+sys.path.insert(0,os.path.join(bide_orokorra, "Algoritmoak"))
+
 import pygame # Digituak idazteko
 import numpy as np
 import time
@@ -38,8 +45,11 @@ RED =(255,0,0)
 # -------------------------------------------------------------------------------
 # -----------------------------DATU BASEA INPORTATU------------------------------
 # -------------------------------------------------------------------------------
-entrenamendu_datuak = pd.read_csv("mnist_train.csv")
-testeatzeko_datuak = pd.read_csv("mnist_test.csv")
+mnist_test_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_test.csv")
+mnist_train_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_train.csv")
+
+entrenamendu_datuak = pd.read_csv(mnist_train_bidea)
+testeatzeko_datuak = pd.read_csv(mnist_test_bidea)
 # print(entrenamendu_datuak.head())
 X_entrenamendu = entrenamendu_datuak.iloc[:,1:]
 Y_entrenamendu = entrenamendu_datuak["label"]
@@ -47,22 +57,26 @@ Y_entrenamendu = entrenamendu_datuak["label"]
 X_test = testeatzeko_datuak.iloc[:,1:]
 Y_test = testeatzeko_datuak["label"]
 
-zutabeen_izenak = X_entrenamendu.columns.tolist()
+# zutabeen_izenak = X_entrenamendu.columns.tolist()
+# print(zutabeen_izenak)
 
 # -------------------------------------------------------------------------------
-# -------------------------------MODELOA INPORTATU-------------------------------
+# ------------------------------MODELOAK INPORTATU-------------------------------
 # -------------------------------------------------------------------------------
 
 # Scikit-learn MODELOA:
-modeloa_sci = pickle.load(open("SkLearn_SVC_model_C_4.pkl","rb"))
+modeloa_sci = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","SkLearn_SVC_model_C_4.pkl"),"rb"))
 modeloa_sci_nota = 0.9843 # Modeloa sortzean kalkulatu dugu
 
 # Nire MODELOA:
-modeloa_nirea = pickle.load(open("Nire_SVC_modeloa_MNIST_iter10000.pkl","rb"))
-modeloa_nirea_info = pickle.load(open("Informazioa_10000.pkl","rb"))
+modeloa_nirea = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Nire_SVC_modeloa_MNIST_iter10000.pkl"),"rb"))
+modeloa_nirea_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Informazioa_10000.pkl"),"rb"))
 modeloa_nirea_nota = 0.9456
 print(modeloa_nirea_info)
 print(modeloa_nirea.koeficient)
+
+modeloa_nirea.deg = 2
+modeloa_nirea.sigma = 0.1
 
 
 
@@ -149,7 +163,7 @@ def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 
         if kernel_mota == "kernel gaussiarra":
             model = SVC(C = koefizientea, kernel = "rbf")
         elif kernel_mota == "kernel polinomiala":
-            model = SVC(C = koefizientea, kernel = "poly",coef0=0)
+            model = SVC(C = koefizientea, kernel = "poly",coef0=1)
         elif kernel_mota == "kernel lineala":
             model = SVC(C = koefizientea, kernel = "linear")
     else:
@@ -160,7 +174,8 @@ def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 
     model.fit(X,Y)
 
     # Datuen minimo eta maximoak
-    h = 0.01
+
+    h = 0.01 if modelo_mota == "Scikit modeloa" else 0.1
     x_min, x_max = np.min(X[:, 0]) - 0.2, np.max(X[:, 0]) + 0.2
     y_min, y_max = np.min(X[:, 1]) - 0.2, np.max(X[:, 1]) + 0.2
     xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
@@ -546,7 +561,7 @@ def menua():
 
     # Irudiak:
     botoien_dist = height//10
-    irudia = pygame.image.load("Menu_figure.png") 
+    irudia = pygame.image.load(os.path.join(bide_orokorra,"Aplikazio_interaktiboa","Menu_figure.png")) 
     irudia = pygame.transform.scale(irudia, (botoien_dist * 5.5, botoien_dist*4))
     irudia_rect = irudia.get_rect()
     irudia_rect.center = (width // 2, height // 2 - botoien_dist* 1.3)

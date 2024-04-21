@@ -1,2 +1,7 @@
 mnist_train.csv
 mnist_test.csv
+pruebak.py
+Informazioa_10000.pkl
+Nire_SVC_modeloa_MNIST_iter1000.pkl
+Nire_SVC_modeloa_MNIST_iter10000.pkl
+SkLearn_SVC_model_C_4.pkl
