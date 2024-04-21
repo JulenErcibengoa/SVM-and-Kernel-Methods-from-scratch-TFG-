@@ -1,0 +1,1 @@
+Karpeta honen barruan gorde datu basea, ondorengo izenekin "mnist_train.csv" entrenamendu datuetarako eta "mnist_test.csv" test-multzorako.
