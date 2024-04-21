@@ -7,7 +7,7 @@ random.seed(124)
 
 n1 = 70 # r = 2 zirkunferentzia barruko puntu kopurua
 n2 = 100 # r = 2 zirkunferentzia kanpoko puntu kopurua
-s = 25 # puntuen tamaina
+s = 50 # puntuen tamaina
 
 x1 = []
 y1 = []
@@ -29,17 +29,18 @@ while len(x2) < n2:
     if (x**2 + y**2 > (erro_2 - 0.4)) and (x**2 + y**2 <= 4):
         x2.append(x)
         y2.append(y)
-plt.scatter(x1,y1, s = s, color = "green")
-plt.scatter(x2,y2,s = s, color = "red")
+plt.scatter(x1,y1, s = s, color = "green", marker= "+")
+plt.scatter(x2,y2,s = s, color = "red", marker= "_")
 plt.xlim([-2,2])
 plt.ylim([-2,2])
-plt.grid()
+# plt.grid()
 plt.gca().set_aspect('equal', adjustable='box')
-plt.title("Datu ez-linealak",fontsize = 15)
-plt.xlabel('X')
-plt.ylabel('Y')
-l = plt.legend(["+","-"])
-l.get_frame().set_alpha(1) 
+# plt.title("Datu ez-linealak",fontsize = 15)
+plt.xlabel(r'$x_1$')
+plt.ylabel(r'$x_2$', rotation = 0)
+# l = plt.legend(["+","-"])
+# l.get_frame().set_alpha(1) 
+plt.tight_layout(pad = .2)
 plt.show()
 
 # 3d grafikoa

@@ -15,7 +15,7 @@ for i in range(2):
             k+=1
         adib = np.array(X_entrenamendu.iloc[k, :])
         adib = np.reshape(adib, (28, 28))
-        axs[i, j].imshow(adib, cmap="gray")
+        axs[i, j].imshow(adib, cmap="gray_r")
         axs[i, j].axis('off') 
         digitua += 1
 
