@@ -19,7 +19,7 @@ class Nire_SGD_kernelekin:
         self.X = None
         self.Y_bakarrak = None
         self.m = None
-        self.koeficient = koeficient # Scikit-Learn paketearen baliokidea izateko
+        self.koeficient = koeficient 
         self.sigma = sigma
         self.deg = deg
 

@@ -1,3 +1,10 @@
+import sys
+import os
+
+oraingo_bidea = os.path.dirname(os.path.realpath(__file__))
+bide_orokorra = os.path.dirname(oraingo_bidea)
+sys.path.insert(0,os.path.join(bide_orokorra, "Algoritmoak"))
+
 from SGD_soft_SVM_Kernels import Nire_SGD_kernelekin
 import numpy as np
 import pandas as pd
@@ -10,11 +17,14 @@ import random
 
 
 
-# ----------------------------------------------------------------------------
-# -------------------------DATU BASEA INPORTATU-------------------------------
-# ----------------------------------------------------------------------------
-entrenamendu_datuak = pd.read_csv("mnist_train.csv")
-testeatzeko_datuak = pd.read_csv("mnist_test.csv")
+# # ----------------------------------------------------------------------------
+# # -------------------------DATU BASEA INPORTATU-------------------------------
+# # ----------------------------------------------------------------------------
+mnist_test_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_test.csv")
+mnist_train_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_train.csv")
+
+entrenamendu_datuak = pd.read_csv(mnist_train_bidea)
+testeatzeko_datuak = pd.read_csv(mnist_test_bidea)
 X_entrenamendu = entrenamendu_datuak.iloc[:,1:]
 Y_entrenamendu = entrenamendu_datuak["label"]
 X_test = testeatzeko_datuak.iloc[:,1:]
@@ -27,9 +37,9 @@ print()
 print("Testeko klaseen agertze proportzioa:")
 print(Y_test.value_counts()/len(Y_test))
 print()
-# ----------------------------------------------------------------------------
-# ----------------------------------------------------------------------------
-# ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
 
 
 
@@ -38,43 +48,43 @@ print()
 
 
 
-# ----------------------------------------------------------------------------
-# -----INFORMAZIOA GORDETZEKO LEKUAK SORTU (LEHENENGO ALDIZ EJEKUTATZEAN)-----
-# ----------------------------------------------------------------------------
-# Hau lehenengo aldiz exekutatzean bakarrik exekutatu, bestela informazioa galdu egingo da
+# # ----------------------------------------------------------------------------
+# # -----INFORMAZIOA GORDETZEKO LEKUAK SORTU (LEHENENGO ALDIZ EJEKUTATZEAN)-----
+# # ----------------------------------------------------------------------------
+# # Hau lehenengo aldiz exekutatzean bakarrik exekutatu, bestela informazioa galdu egingo da
 
 # Notak_matrizea_Nire_rbf = np.zeros((7,7))
 # Notak_matrizea_Nire_rbf_handitua = np.zeros((14,7))
 # Notak_matrizea_Nire_poly = np.zeros((7,7))
 
-# pickle.dump(Notak_matrizea_Nire_rbf,open("Notak_matrizea_Nire_rbf.pkl","wb"))
-# pickle.dump(Notak_matrizea_Nire_rbf_handitua,open("Notak_matrizea_Nire_rbf_handitua.pkl","wb"))
-# pickle.dump(Notak_matrizea_Nire_poly,open("Notak_matrizea_Nire_poly.pkl","wb"))
+# pickle.dump(Notak_matrizea_Nire_rbf,open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_Nire_rbf.pkl"),"wb"))
+# pickle.dump(Notak_matrizea_Nire_rbf_handitua,open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_Nire_rbf_handitua.pkl"),"wb"))
+# pickle.dump(Notak_matrizea_Nire_poly,open(os.path.join(oraingo_bidea, "Modeloen_informazioa","Notak_matrizea_Nire_poly.pkl"),"wb"))
 
-# with open('Nire_modeloen_notak.txt', 'w') as informazioa:
+# with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Nire_modeloen_notak.txt'), 'w') as informazioa:
 #     informazioa.write("Nire modelo desberdinak, kernel gaussiarra\n\n")
 
-# ----------------------------------------------------------------------------
-# ----------------------------------------------------------------------------
-# ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
 
 
 
 
 
-# ----------------------------------------------------------------------------
-# -------INFORMAZIOA GORDETZEKO LEKUAK IREKI (LEHENENGO ITERAZIOAN EZ)--------
-# ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
+# # -------INFORMAZIOA GORDETZEKO LEKUAK IREKI (LEHENENGO ITERAZIOAN EZ)--------
+# # ----------------------------------------------------------------------------
 
-Notak_matrizea_Nire_rbf = pickle.load(open("Notak_matrizea_Nire_rbf.pkl","rb"))
-Notak_matrizea_Nire_rbf_handitua = pickle.load(open("Notak_matrizea_Nire_rbf_handitua.pkl","rb"))
+Notak_matrizea_Nire_rbf = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_Nire_rbf.pkl"),"rb"))
+Notak_matrizea_Nire_rbf_handitua = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_Nire_rbf_handitua.pkl"),"rb"))
 # Notak_matrizea_Nire_rbf_handitua[7:,:] = Notak_matrizea_Nire_rbf
-# pickle.dump(Notak_matrizea_Nire_rbf_handitua,open("Notak_matrizea_Nire_rbf_handitua.pkl","wb"))
-Notak_matrizea_Nire_poly = pickle.load(open("Notak_matrizea_Nire_poly.pkl","rb"))
+# pickle.dump(Notak_matrizea_Nire_rbf_handitua,open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_Nire_rbf_handitua.pkl"),"wb"))
+Notak_matrizea_Nire_poly = pickle.load(open(os.path.join(oraingo_bidea, "Modeloen_informazioa","Notak_matrizea_Nire_poly.pkl"),"rb"))
 print(f"INFORMAZIOA KARGATUTA: \n\n Noten matrizea kernel gaussiarra = \n{Notak_matrizea_Nire_rbf}\n\n Noten matrizea kernel gaussiarra handitua = \n{Notak_matrizea_Nire_rbf_handitua}\n\n Noten matrizea kernel polinomiala = \n{Notak_matrizea_Nire_poly}\n\n")
 
 
-# Grafikoa RBF
+# # Grafikoa RBF
 plt.figure(figsize=(10, 5))
 plt.imshow(Notak_matrizea_Nire_rbf, aspect="auto")
 plt.xticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
@@ -91,7 +101,7 @@ for i in range(Notak_matrizea_Nire_rbf.shape[0]):
 plt.show()
 
 
-# Grafikoa RBF handitua
+# # Grafikoa RBF handitua
 plt.imshow(Notak_matrizea_Nire_rbf_handitua)
 plt.xticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
 plt.xlabel(r"$\sigma$")
@@ -107,7 +117,7 @@ plt.tight_layout(pad = 0.2)
 plt.show()
 
 
-# Grafikoa RBF handitua (goiko zatia bakarrik)
+# # Grafikoa RBF handitua (goiko zatia bakarrik)
 matrizea = Notak_matrizea_Nire_rbf_handitua[0:7,:]
 plt.figure(figsize=(10, 5))
 plt.imshow(matrizea,aspect="auto")
@@ -125,14 +135,14 @@ for i in range(matrizea.shape[0]):
 plt.show()
 
 
-# Grafikoa kernel polinomiala
+# # Grafikoa kernel polinomiala
 plt.figure(figsize=(10, 5))
 plt.imshow(Notak_matrizea_Nire_poly, aspect= "auto")
 plt.xticks(np.arange(0, 7, 1), [2,3,4,5,6,7,8])
 plt.xlabel("polinomioaren maila")
 plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
 plt.ylabel("C", rotation = 0)
-#plt.title("Nire modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel polinomiala 1000 iteraziorekin klase bakoitzerako")
+# plt.title("Nire modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel polinomiala 1000 iteraziorekin klase bakoitzerako")
 plt.colorbar(label='Asmatutako proportzioa')
 plt.clim(0,1)
 plt.tight_layout(pad = 0.2)
@@ -146,13 +156,13 @@ plt.show()
 
 
 
-# ----------------------------------------------------------------------------
-# ----------------------------------------------------------------------------
-# ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
 
 
 
-# Entrenamendu asko egiteko aldi berean (joblib): 
+# # Entrenamendu asko egiteko aldi berean (joblib): 
 def entrenatu (C,param,kernela,i,j,Nota_matrizea):
     if kernela == "rbf":
         if Nota_matrizea[i,j] == 0:
@@ -190,62 +200,62 @@ def entrenatu (C,param,kernela,i,j,Nota_matrizea):
 
 
 
-# ----------------------------------------------------------------------------
-# ----------------------------KERNEL GAUSSIARRA-------------------------------
-# ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
+# # ----------------------------KERNEL GAUSSIARRA-------------------------------
+# # ----------------------------------------------------------------------------
 
-# Parametroak:
+# # Parametroak:
 C_parametroak = np.logspace(-3, 3, 7) 
 gamma_parametroak = np.logspace(-3, 3, 7)
 
-# Entrenatu (entrenamendua geldi daiteke, baina goiko kodea komentatu egin behar da berriro hasterakoan entrenatzen,
-# bestela informazioa galdu egingo da)
+# # Entrenatu (entrenamendua geldi daiteke, baina goiko kodea komentatu egin behar da berriro hasterakoan entrenatzen,
+# # bestela informazioa galdu egingo da)
 for i,C in enumerate(C_parametroak):
     for j,gamma in enumerate(gamma_parametroak):
-        Notak_matrizea_Nire_rbf = pickle.load(open("Notak_matrizea_Nire_rbf.pkl","rb"))
+        Notak_matrizea_Nire_rbf = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_Nire_rbf.pkl"),"rb"))
         entrenatu(C,gamma,"rbf",i,j,Notak_matrizea_Nire_rbf)
-        pickle.dump(Notak_matrizea_Nire_rbf,open("Notak_matrizea_Nire_rbf.pkl","wb"))
+        pickle.dump(Notak_matrizea_Nire_rbf,open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_Nire_rbf.pkl"),"wb"))
 
 
 
-# ----------------------------------------------------------------------------
-# -------------------KERNEL GAUSSIARRA MATRIZE HANDITUA-----------------------
-# ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
+# # -------------------KERNEL GAUSSIARRA MATRIZE HANDITUA-----------------------
+# # ----------------------------------------------------------------------------
 
-# with open('Nire_modeloen_notak.txt', 'a') as informazioa:
+# with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Nire_modeloen_notak.txt'), 'a') as informazioa:
 #     informazioa.write("\n\nNire modelo desberdinak, kernel gaussiarra, bertsio handitua\n\n")
 
-# Parametroak:
+# # Parametroak:
 C_parametroak = np.logspace(-10, 3, 14) 
 gamma_parametroak = np.logspace(-3, 3, 7)
 
-# Entrenatu (entrenamendua geldi daiteke, baina goiko kodea komentatu egin behar da berriro hasterakoan entrenatzen,
-# bestela informazioa galdu egingo da)
+# # Entrenatu (entrenamendua geldi daiteke, baina goiko kodea komentatu egin behar da berriro hasterakoan entrenatzen,
+# # bestela informazioa galdu egingo da)
 for i in  range(len(C_parametroak)-1,-1,-1):
     C = C_parametroak[i]
     for j,gamma in enumerate(gamma_parametroak):
-        Notak_matrizea_Nire_rbf_handitua = pickle.load(open("Notak_matrizea_Nire_rbf_handitua.pkl","rb"))
+        Notak_matrizea_Nire_rbf_handitua = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_Nire_rbf_handitua.pkl"),"rb"))
         entrenatu(C,gamma,"rbf",i,j,Notak_matrizea_Nire_rbf_handitua)
-        pickle.dump(Notak_matrizea_Nire_rbf_handitua,open("Notak_matrizea_Nire_rbf_handitua.pkl","wb"))
+        pickle.dump(Notak_matrizea_Nire_rbf_handitua,open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_Nire_rbf_handitua.pkl"),"wb"))
 
 
 
-# ----------------------------------------------------------------------------
-# ----------------------------KERNEL POLINOMIALA------------------------------
-# ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
+# # ----------------------------KERNEL POLINOMIALA------------------------------
+# # ----------------------------------------------------------------------------
         
-with open('Nire_modeloen_notak.txt', 'a') as informazioa:
-    informazioa.write("\n\nNire modelo desberdinak, kernel polinomiala\n\n")
+# with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Nire_modeloen_notak.txt'), 'a') as informazioa:
+#     informazioa.write("\n\nNire modelo desberdinak, kernel polinomiala\n\n")
 
-# Parametroak:
+# # Parametroak:
 C_parametroak = np.logspace(-3, 3, 7) 
 maila_desberdinak = [2,3,4,5,6,7,8]
 
-# Entrenatu (entrenamendua geldi daiteke, baina goiko kodea komentatu egin behar da berriro hasterakoan entrenatzen,
-# bestela informazioa galdu egingo da)
+# # Entrenatu (entrenamendua geldi daiteke, baina goiko kodea komentatu egin behar da berriro hasterakoan entrenatzen,
+# # bestela informazioa galdu egingo da)
 for i,C in enumerate(C_parametroak):
     for j,d in enumerate(maila_desberdinak):
-        Notak_matrizea_Nire_poly = pickle.load(open("Notak_matrizea_Nire_poly.pkl","rb"))
+        Notak_matrizea_Nire_poly = pickle.load(open(os.path.join(oraingo_bidea, "Modeloen_informazioa","Notak_matrizea_Nire_poly.pkl"),"rb"))
         entrenatu(C,d,"poly",i,j,Notak_matrizea_Nire_poly)
-        pickle.dump(Notak_matrizea_Nire_poly,open("Notak_matrizea_Nire_poly.pkl","wb"))
+        pickle.dump(Notak_matrizea_Nire_poly,open(os.path.join(oraingo_bidea, "Modeloen_informazioa","Notak_matrizea_Nire_poly.pkl"),"wb"))
 

@@ -1,3 +1,10 @@
+import sys
+import os
+
+oraingo_bidea = os.path.dirname(os.path.realpath(__file__))
+bide_orokorra = os.path.dirname(oraingo_bidea)
+sys.path.append(os.path.join(bide_orokorra, "Algoritmoak","SGD_soft_SVM_Kernels.py"))
+
 from sklearn.svm import SVC
 import numpy as np
 import pandas as pd
@@ -12,8 +19,11 @@ import matplotlib.pyplot as plt
 # ----------------------------------------------------------------------------
 # -------------------------DATU BASEA INPORTATU-------------------------------
 # ----------------------------------------------------------------------------
-entrenamendu_datuak = pd.read_csv("mnist_train.csv")
-testeatzeko_datuak = pd.read_csv("mnist_test.csv")
+mnist_test_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_test.csv")
+mnist_train_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_train.csv")
+
+entrenamendu_datuak = pd.read_csv(mnist_train_bidea)
+testeatzeko_datuak = pd.read_csv(mnist_test_bidea)
 X_entrenamendu = entrenamendu_datuak.iloc[:,1:]
 Y_entrenamendu = entrenamendu_datuak["label"]
 X_test = testeatzeko_datuak.iloc[:,1:]
@@ -41,11 +51,11 @@ print()
 # Notak_matrizea_poly = np.zeros((7,7))
 # Notak_matrizea_poly_handia = np.zeros((21,19))
 
-# pickle.dump(Notak_matrizea_rbf,open("Notak_matrizea_rbf.pkl","wb"))
-# pickle.dump(Notak_matrizea_poly,open("Notak_matrizea_poly.pkl","wb"))
-# pickle.dump(Notak_matrizea_poly_handia,open("Notak_matrizea_poly_handia.pkl","wb"))
+# pickle.dump(Notak_matrizea_Nire_rbf,open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_rbf.pkl"),"wb"))
+# pickle.dump(Notak_matrizea_Nire_rbf,open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_poly.pkl"),"wb"))
+# pickle.dump(Notak_matrizea_Nire_rbf,open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_poly_handia.pkl"),"wb"))
 
-# with open('Modeloen_notak.txt', 'w') as informazioa:
+# with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Modeloen_notak.txt'), 'w') as informazioa:
 #     informazioa.write("Scikit-Learn modelo desberdinak, kernel gaussiarra\n\n")
 
 # ----------------------------------------------------------------------------
@@ -58,15 +68,13 @@ print()
 # -------INFORMAZIOA GORDETZEKO LEKUAK IREKI (LEHENENGO ITERAZIOAN EZ)--------
 # ----------------------------------------------------------------------------
 
-Notak_matrizea_rbf = pickle.load(open("Notak_matrizea_rbf.pkl","rb"))
-Notak_matrizea_poly = pickle.load(open("Notak_matrizea_poly.pkl","rb"))
-Notak_matrizea_poly_handia = pickle.load(open("Notak_matrizea_poly_handia.pkl","rb"))
+Notak_matrizea_rbf = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_rbf.pkl"),"rb"))
+Notak_matrizea_poly = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_poly.pkl"),"rb"))
+Notak_matrizea_poly_handia = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_poly_handia.pkl"),"rb"))
 # Notak_matrizea_poly_handia[7:14,0:7] = Notak_matrizea_poly
-# pickle.dump(Notak_matrizea_poly_handia,open("Notak_matrizea_poly_handia.pkl","wb"))
+# pickle.dump(Notak_matrizea_Nire_rbf,open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_poly_handia.pkl"),"wb"))
 print(f"INFORMAZIOA KARGATUTA: \n\n Noten matrizea kernel gaussiarra = \n{Notak_matrizea_rbf}\n\n Noten matrizea kernel polinomiala = \n{Notak_matrizea_poly}\n\nNoten matrizea kernel polinomiala handia = \n{Notak_matrizea_poly_handia}\n\n")
 
-# Notak_matrizea_poly_handia[7:14,0:7] = Notak_matrizea_poly
-# pickle.dump(Notak_matrizea_poly_handia,open("Notak_matrizea_poly_handia.pkl","wb"))
 
 
 # Grafikoa RBF:
@@ -174,9 +182,9 @@ gamma_parametroak = np.logspace(-3, 3, 7)
 # bestela informazioa galdu egingo da)
 for i,C in enumerate(C_parametroak):
     for j,gamma in enumerate(gamma_parametroak):
-        Notak_matrizea_rbf = pickle.load(open("Notak_matrizea_rbf.pkl","rb"))
+        Notak_matrizea_rbf = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_rbf.pkl"),"rb"))
         entrenatu(C,gamma,"rbf",i,j,Notak_matrizea_rbf)
-        pickle.dump(Notak_matrizea_rbf,open("Notak_matrizea_rbf.pkl","wb"))
+        pickle.dump(Notak_matrizea_rbf,open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_rbf.pkl"),"wb"))
 
 
 
@@ -185,7 +193,7 @@ for i,C in enumerate(C_parametroak):
 # ----------------------------KERNEL POLINOMIALA------------------------------
 # ----------------------------------------------------------------------------
         
-# with open('Modeloen_notak.txt', 'a') as informazioa:
+# with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Modeloen_notak.txt'), 'a') as informazioa:
 #     informazioa.write("\n\nScikit-Learn modelo desberdinak, kernel polinomiala\n\n")
 
 # Parametroak:
@@ -196,9 +204,9 @@ maila_desberdinak = [2,3,4,5,6,7,8]
 # bestela informazioa galdu egingo da)
 for i,C in enumerate(C_parametroak):
     for j,d in enumerate(maila_desberdinak):
-        Notak_matrizea_poly = pickle.load(open("Notak_matrizea_poly.pkl","rb"))
+        Notak_matrizea_poly = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_poly.pkl"),"rb"))
         entrenatu(C,d,"poly",i,j,Notak_matrizea_poly)
-        pickle.dump(Notak_matrizea_poly,open("Notak_matrizea_poly.pkl","wb"))
+        pickle.dump(Notak_matrizea_poly,open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_poly.pkl"),"wb"))
 
 
 
@@ -207,7 +215,7 @@ for i,C in enumerate(C_parametroak):
 # -------------------------KERNEL POLINOMIAL HANDIA---------------------------
 # ----------------------------------------------------------------------------
         
-# with open('Modeloen_notak.txt', 'a') as informazioa:
+# with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Modeloen_notak.txt'), 'a') as informazioa:
 #     informazioa.write("\n\nScikit-Learn modelo desberdinak, kernel polinomiala: bertsio handitua\n\n")
 
 # Parametroak:
@@ -218,13 +226,13 @@ maila_desberdinak = [i for i in range(2,21)]
 # bestela informazioa galdu egingo da)
 for i,C in enumerate(C_parametroak):
     for j,d in enumerate(maila_desberdinak):
-        Notak_matrizea_poly_handia = pickle.load(open("Notak_matrizea_poly_handia.pkl","rb"))
+        Notak_matrizea_poly_handia = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_poly_handia.pkl"),"rb"))
         entrenatu(C,d,"poly",i,j,Notak_matrizea_poly_handia)
-        pickle.dump(Notak_matrizea_poly_handia,open("Notak_matrizea_poly_handia.pkl","wb"))
+        pickle.dump(Notak_matrizea_poly_handia,open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_poly_handia.pkl"),"wb"))
 
 
 # # ------------------------------GRAFIKOA EGIN---------------------------------
-Notak_matrizea_poly_handia = pickle.load(open("Notak_matrizea_poly_handia.pkl","rb"))
+Notak_matrizea_poly_handia = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_poly_handia.pkl"),"rb"))
 plt.imshow(Notak_matrizea_poly_handia)
 plt.xticks(np.arange(0, 19, 1), [i for i in range(2,21)])
 plt.xlabel("polinomioaren maila")
