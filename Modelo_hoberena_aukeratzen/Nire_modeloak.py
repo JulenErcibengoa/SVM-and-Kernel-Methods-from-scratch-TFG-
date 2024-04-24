@@ -176,7 +176,7 @@ def entrenatu (C,param,kernela,i,j,Nota_matrizea):
             modeloa.fit(X_entrenamendu.values,Y_entrenamendu.values,iter=1000)
             nota = modeloa.score(X_test.values,Y_test.values)
             Nota_matrizea[i][j] = nota
-            with open('Nire_modeloen_notak.txt', 'a') as informazioa:
+            with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Nire_modeloen_notak.txt'), 'a') as informazioa:
                 informazioa.write(f"(i,j) = ({i},{j}), C = {C}, sigma = {param} --> Nota = {Nota_matrizea[i,j]}\n")
             
             print(f"Eginda ({i},{j}) posizioaren entrenamendua, horrela gelditu da noten matrizea:")
@@ -194,7 +194,7 @@ def entrenatu (C,param,kernela,i,j,Nota_matrizea):
             nota = modeloa.score(X_test.values,Y_test.values)
             Nota_matrizea[i][j] = nota
 
-            with open('Nire_modeloen_notak.txt', 'a') as informazioa:
+            with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Nire_modeloen_notak.txt'), 'a') as informazioa:
                 informazioa.write(f"(i,j) = ({i},{j}), C = {C}, maila = {param} --> Nota = {Nota_matrizea[i,j]}\n")
             print(f"Eginda ({i},{j}) posizioaren entrenamendua, horrela gelditu da noten matrizea:")
             print(Nota_matrizea)
