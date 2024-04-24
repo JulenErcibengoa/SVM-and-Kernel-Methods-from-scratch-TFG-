@@ -91,7 +91,7 @@ plt.xticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,
 plt.xlabel(r"$\sigma$")
 plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
 plt.ylabel(r"$\lambda$", rotation = 0)
-#plt.title("Nire modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel gaussiarra 1000 iteraziorekin klase bakoitzerako")
+# plt.title("Nire modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel gaussiarra 1000 iteraziorekin klase bakoitzerako")
 plt.colorbar(label='Asmatutako proportzioa')
 plt.clim(0,1)
 plt.tight_layout(pad = 0.2)
