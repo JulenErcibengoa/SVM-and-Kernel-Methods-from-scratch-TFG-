@@ -77,46 +77,48 @@ print(f"INFORMAZIOA KARGATUTA: \n\n Noten matrizea kernel gaussiarra = \n{Notak_
 
 
 # # Grafikoa RBF:
+matrizea = np.flip(Notak_matrizea_rbf,0)
 plt.figure(figsize=(10, 5))
-plt.imshow(Notak_matrizea_rbf, aspect= "auto")
+plt.imshow(matrizea, aspect= "auto")
 plt.xticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
 plt.xlabel(r"$\gamma$")
-plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
+plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3][::-1]])
 plt.ylabel("C", rotation = 0)
 # plt.title("Modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel gaussiarra")
 plt.colorbar(label='Asmatutako proportzioa')
 plt.clim(0,1)
 plt.tight_layout(pad = 0.2)
-for i in range(Notak_matrizea_rbf.shape[0]):
-    for j in range(Notak_matrizea_rbf.shape[1]):
-        plt.text(j, i, '{:.4f}'.format(Notak_matrizea_rbf[i, j]), ha='center', va='center', color='white' if Notak_matrizea_rbf[i, j] < 0.5 else "black", fontsize = 12)
+for i in range(matrizea.shape[0]):
+    for j in range(matrizea.shape[1]):
+        plt.text(j, i, '{:.4f}'.format(matrizea[i, j]), ha='center', va='center', color='white' if matrizea[i, j] < 0.5 else "black", fontsize = 12)
 plt.show()
 
 
 # # Grafikoa poly
+matrizea = np.flip(Notak_matrizea_poly,0)
 plt.figure(figsize = (10,5))
-plt.imshow(Notak_matrizea_poly, aspect= "auto")
+plt.imshow(matrizea, aspect= "auto")
 plt.xticks(np.arange(0, 7, 1), [2,3,4,5,6,7,8])
 plt.xlabel("polinomioaren maila")
-plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3]])
+plt.yticks(np.arange(0, 7, 1), [r'$10^{{{}}}$'.format(j) for j in [-3,-2,-1,0,1,2,3][::-1]])
 plt.ylabel("C", rotation = 0)
 # plt.title("Modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel polinomiala")
 plt.colorbar(label='Asmatutako proportzioa')
 plt.clim(0,1)
 plt.tight_layout(pad = 0.2)
-for i in range(Notak_matrizea_poly.shape[0]):
-    for j in range(Notak_matrizea_poly.shape[1]):
-        plt.text(j, i, '{:.4f}'.format(Notak_matrizea_poly[i, j]), ha='center', va='center', color='white' if Notak_matrizea_poly[i, j] < 0.5 else "black", fontsize = 12)
+for i in range(matrizea.shape[0]):
+    for j in range(matrizea.shape[1]):
+        plt.text(j, i, '{:.4f}'.format(matrizea[i, j]), ha='center', va='center', color='white' if matrizea[i, j] < 0.5 else "black", fontsize = 12)
 plt.show()
 
 
 # # Grafikoa poly handitua
-
+matrizea = np.flip(Notak_matrizea_poly_handia,0)
 plt.figure(figsize=(10, 5))
-plt.imshow(Notak_matrizea_poly_handia, aspect = "auto")
+plt.imshow(matrizea, aspect = "auto")
 plt.xticks(np.arange(0, 19, 1), [i for i in range(2,21)])
 plt.xlabel("polinomioaren maila")
-plt.yticks(np.arange(0, 21, 1), [r'$10^{{{}}}$'.format(j) for j in range(-10,11)])
+plt.yticks(np.arange(0, 21, 1), [r'$10^{{{}}}$'.format(j) for j in range(10,-11,-1)])
 plt.ylabel("C", rotation = 0)
 plt.title("Modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel polinomiala: bertsio handia")
 plt.colorbar(label='Asmatutako proportzioa')
@@ -143,7 +145,7 @@ def entrenatu (C,param,kernela,i,j,Nota_matrizea):
             modeloa.fit(X_entrenamendu,Y_entrenamendu)
             nota = modeloa.score(X_test,Y_test)
             Nota_matrizea[i][j] = nota
-            with open('Modeloen_notak.txt', 'a') as informazioa:
+            with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Modeloen_notak.txt'), 'a') as informazioa:
                 informazioa.write(f"(i,j) = ({i},{j}), C = {C}, gamma = {param} --> Nota = {Nota_matrizea[i,j]}\n")
             
             print(f"Eginda ({i},{j}) posizioaren entrenamendua, horrela gelditu da noten matrizea:")
@@ -160,7 +162,7 @@ def entrenatu (C,param,kernela,i,j,Nota_matrizea):
             nota = modeloa.score(X_test,Y_test)
             Nota_matrizea[i][j] = nota
 
-            with open('Modeloen_notak.txt', 'a') as informazioa:
+            with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Modeloen_notak.txt'), 'a') as informazioa:
                 informazioa.write(f"(i,j) = ({i},{j}), C = {C}, maila = {param} --> Nota = {Nota_matrizea[i,j]}\n")
             print(f"Eginda ({i},{j}) posizioaren entrenamendua, horrela gelditu da noten matrizea:")
             print(Nota_matrizea)
