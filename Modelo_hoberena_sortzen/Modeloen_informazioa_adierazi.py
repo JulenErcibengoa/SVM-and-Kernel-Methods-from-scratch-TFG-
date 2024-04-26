@@ -42,11 +42,12 @@ Nire_gauss = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak
 Nire_gauss_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Nire_modelo_hoberena_gauss_info.pkl"),"rb"))
 
 # # Informazioa erakutsi:
-
 print("Nire modeloa, kernel gausiarra:")
 print(f"Behar izan duen denbora: {Nire_gauss_info[0]}")
 print(f"Lortu duen asmatze-proportzioa: {Nire_gauss_info[1]}")
 print()
+
+# Conffusion Matrix egin:
 
 
 
@@ -66,5 +67,46 @@ Nire_poly_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_mode
 print("Nire modeloa, kernel polinomiala:")
 print(f"Behar izan duen denbora: {Nire_poly_info[0]}")
 print(f"Lortu duen asmatze-proportzioa: {Nire_poly_info[1]}")
+print()
+
+
+
+
+
+
+# # ----------------------------------------------------------------------------
+# # --------------------SCIKIT MODELOA KERNEL GAUSSIARRA--------------------------
+# # ----------------------------------------------------------------------------
+
+# # Modeloa inportatu
+Scikit_gauss = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_gauss.pkl"),"rb"))
+Scikit_gauss_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_gauss_info.pkl"),"rb"))
+
+# # Informazioa erakutsi:
+print("Nire modeloa, kernel gausiarra:")
+print(f"Behar izan duen denbora: {Scikit_gauss_info[0]}")
+print(f"Lortu duen asmatze-proportzioa: {Scikit_gauss_info[1]}")
+print()
+
+# Conffusion Matrix egin:
+
+
+
+
+
+
+# # ----------------------------------------------------------------------------
+# # --------------------SCIKIT MODELOA KERNEL POLINOMIALA-------------------------
+# # ----------------------------------------------------------------------------
+
+# # Modeloa inportatu
+Scikit_poly = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_poly.pkl"),"rb"))
+Scikit_poly_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_poly_info.pkl"),"rb"))
+
+# # Informazioa erakutsi:
+
+print("Nire modeloa, kernel polinomiala:")
+print(f"Behar izan duen denbora: {Scikit_poly_info[0]}")
+print(f"Lortu duen asmatze-proportzioa: {Scikit_poly_info[1]}")
 print()
 
