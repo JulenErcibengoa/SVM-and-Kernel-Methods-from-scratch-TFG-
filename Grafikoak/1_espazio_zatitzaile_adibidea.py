@@ -10,8 +10,8 @@ y = m * x - b
 # Grafikoa sortu: 
 plt.plot(x, y, label=r'$-x + y - 1 = 0$')
 # plt.title('Espazio zatitzailea '+r'$\vec{w} = (-1,1)$' + ' eta ' + r'$b = -1$',fontsize = 15)
-plt.xlabel(r'$x_1$')
-plt.ylabel(r'$x_2$',rotation = 0)
+plt.xlabel(r'$x_1$', fontsize = 17)
+plt.ylabel(r'$x_2$',rotation = 0, fontsize = 17)
 plt.tight_layout(pad = 0.2)
 
 plt.grid(True)

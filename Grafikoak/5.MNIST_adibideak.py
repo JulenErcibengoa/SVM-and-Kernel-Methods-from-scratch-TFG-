@@ -1,8 +1,15 @@
+import sys
+import os
+
+oraingo_bidea = os.path.dirname(os.path.realpath(__file__))
+bide_orokorra = os.path.dirname(oraingo_bidea)
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-entrenamendu_datuak = pd.read_csv("mnist_train.csv")
+mnist_train_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_train.csv")
+entrenamendu_datuak = pd.read_csv(mnist_train_bidea)
 X_entrenamendu = entrenamendu_datuak.iloc[:,1:]
 Y_entrenamendu = entrenamendu_datuak["label"]
 

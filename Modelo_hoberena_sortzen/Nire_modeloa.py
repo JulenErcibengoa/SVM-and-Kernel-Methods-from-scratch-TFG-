@@ -30,6 +30,8 @@ Y_test = testeatzeko_datuak["label"]
 X_entrenamendu = X_entrenamendu / 255
 X_test = X_test / 255
 
+seed_number = 100
+
 
 
 # # ----------------------------------------------------------------------------
@@ -39,7 +41,7 @@ X_test = X_test / 255
 # # Modeloa sortu:
 modelo_gauss = Nire_SGD_kernelekin(koeficient=10**(-3), kernel = "kernel gaussiarra", sigma = 10)
 t0 = time.time()
-random.seed(100)
+random.seed(seed_number)
 modelo_gauss.fit(X_entrenamendu.values, Y_entrenamendu.values, iter = 10000)
 t1 = time.time()
 nota = modelo_gauss.score(X_test.values, Y_test.values)
@@ -69,7 +71,7 @@ pickle.dump(modelo_gauss_info, open(os.path.join(bide_orokorra, "Entrenatutako_m
 # # Modeloa sortu:
 modelo_poly = Nire_SGD_kernelekin(koeficient=10**(3), kernel = "kernel polinomiala", deg = 3)
 t0 = time.time()
-random.seed(100)
+random.seed(seed_number)
 modelo_poly.fit(X_entrenamendu.values, Y_entrenamendu.values, iter = 10000)
 t1 = time.time()
 nota = modelo_poly.score(X_test.values, Y_test.values)
