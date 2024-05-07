@@ -46,15 +46,16 @@ plt.ylim([-3.2,3.2])
 plt.gca().set_aspect('equal', adjustable='box')
 
 # Puntuak gehitu
-random.seed(124)
+random.seed(121)
 
 n = 15
 # Negatiboak
-kx_minus, ky_minus = sortu_puntuak(n, 1, 3.5, -1, -3.5) 
+kx_minus, ky_minus = sortu_puntuak(n+5, 0.6, 3.5, -0.6, -3.5) 
 plt.scatter(kx_minus, ky_minus, color='red', marker='_', s = 300)
-kx_minus, ky_minus = sortu_puntuak(n-n//3 * 2, 2.2, 3.5, -0.3, -1) 
+kx_minus, ky_minus = sortu_puntuak(n-n//2, 1.8, 3.5, -0.3, -1) 
 plt.scatter(kx_minus, ky_minus, color='red', marker='_', s = 300)
 
+n = 20
 kx_plus, ky_plus = sortu_puntuak(n, -1.4, -3.5, 1.4, 3.5) 
 plt.scatter(kx_plus, ky_plus, color='green', marker='+', s = 300)
 kx_minus, ky_minus = sortu_puntuak(n-n//3 * 2, -0.3, -1,2.2, 3.5) 
