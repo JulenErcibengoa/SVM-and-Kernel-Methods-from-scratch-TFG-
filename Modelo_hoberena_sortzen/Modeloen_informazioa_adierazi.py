@@ -53,6 +53,7 @@ print()
 # Nire_gauss_test_predikzioak = Nire_gauss.predict_anitzkoitza(X_test.values())
 
 # # Gaizki egindako predikzioak bisualizatu:
+random.seed(123)
 fig, axs = plt.subplots(2,5, figsize = (12,8))
 k = random.randint(0, len(Y_test)-1)
 for i in range(2):
