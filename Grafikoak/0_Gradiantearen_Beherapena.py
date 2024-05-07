@@ -19,6 +19,12 @@ def GD(f,grad_f,x0,iter = 100, mu = 0.1):
 
 minim, W = GD(f= f, grad_f= gradiant_f, x0= np.array([-30,40]), iter = 100, mu = 0.1)
 
+def twoD_GD(f, df, x0, iter = 100, mu = 0.1):
+    W = np.zeros(iter)
+    W[0] = x0
+    for t in range(iter-1):
+        W[t+1] = W[t]- mu * df(W[t])
+    return 1/iter * sum(W), W
 
 # Generar datos para x, y
 x = np.linspace(-50, 50, 100)
@@ -34,8 +40,8 @@ ax = fig.add_subplot(projection='3d')
 
 # Graficar el contorno de la función
 
-altuera = np.array([1000 for i in range(100)])
-contorno = ax.plot_surface(x, y, z, cmap = plt.cm.cividis, alpha = 1)
+altuera = np.array([10 for i in range(100)])
+contorno = ax.plot_surface(x, y, z, cmap = plt.cm.cividis, alpha = 0.5)
 puntos = ax.scatter(W[:,0], W[:,1], f(W[:,0],W[:,1]) + altuera, c = 'r', s = 10,alpha = 1)
 
 # Etiquetas de los ejes
@@ -45,4 +51,21 @@ ax.set_zlabel('Z')
 
 # Mostrar el gráfico
 plt.show()
+
+
+
+
+
+# En 2d
+
+x = np.linspace(-3,3,100)
+
+def funct(x):
+    return x^3
+
+def df(x):
+    return 3*x^2
+
+y = funct(x)
+
 
