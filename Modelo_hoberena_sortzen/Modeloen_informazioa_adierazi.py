@@ -53,21 +53,27 @@ print()
 # Nire_gauss_test_predikzioak = Nire_gauss.predict_anitzkoitza(X_test.values())
 
 # # Gaizki egindako predikzioak bisualizatu:
-digitu_kopurua = 10
-fig, axs = plt.subplots(2,5, figsize = (12,6))
-k = 0
+fig, axs = plt.subplots(2,5, figsize = (12,8))
+k = random.randint(0, len(Y_test)-1)
 for i in range(2):
     for j in range(5):
-        while Nire_gauss.predict(X_test.iloc[k,:]) != Y_test.iloc[i]:
-            k += 1
+        predikzioa =  Nire_gauss.predict(X_test.iloc[k,:])
+        zuzena = Y_test.iloc[k]
+        while predikzioa == zuzena:
+            k = random.randint(0, len(Y_test)-1)
+            predikzioa =  Nire_gauss.predict(X_test.iloc[k,:])
+            zuzena = Y_test.iloc[k]
         adib = np.array(X_test.iloc[k, :])
         adib = np.reshape(adib, (28,28))
         axs[i,j].imshow(adib, cmap = "gray_r")
         axs[i,j].axis("off")
+        axs[i,j].text(0.5,1,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
         k += 1
+        print(i,j)
 
-plt.tight_layout(pad = 0.2)
-plt.show()
+plt.tight_layout(pad = 0)
+# plt.show()
+plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Nire_gauss_gaizki_klasifikatuak.png"))
 
 
 
@@ -90,41 +96,111 @@ print()
 
 
 
+# # Gaizki egindako predikzioak bisualizatu:
+fig, axs = plt.subplots(2,5, figsize = (12,8))
+k = random.randint(0, len(Y_test)-1)
+for i in range(2):
+    for j in range(5):
+        predikzioa =  Nire_poly.predict(X_test.iloc[k,:])
+        zuzena = Y_test.iloc[k]
+        while predikzioa == zuzena:
+            k = random.randint(0, len(Y_test)-1)
+            predikzioa =  Nire_poly.predict(X_test.iloc[k,:])
+            zuzena = Y_test.iloc[k]
+        adib = np.array(X_test.iloc[k, :])
+        adib = np.reshape(adib, (28,28))
+        axs[i,j].imshow(adib, cmap = "gray_r")
+        axs[i,j].axis("off")
+        axs[i,j].text(0.5,1,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
+        k += 1
+        print(i,j)
+
+plt.tight_layout(pad = 0)
+# plt.show()
+plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Nire_poly_gaizki_klasifikatuak.png"))
 
 
-# # # ----------------------------------------------------------------------------
-# # # --------------------SCIKIT MODELOA KERNEL GAUSSIARRA--------------------------
-# # # ----------------------------------------------------------------------------
-
-# # # Modeloa inportatu
-# Scikit_gauss = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_gauss.pkl"),"rb"))
-# Scikit_gauss_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_gauss_info.pkl"),"rb"))
-
-# # # Informazioa erakutsi:
-# print("Nire modeloa, kernel gausiarra:")
-# print(f"Behar izan duen denbora: {Scikit_gauss_info[0]}")
-# print(f"Lortu duen asmatze-proportzioa: {Scikit_gauss_info[1]}")
-# print()
-
-# # Conffusion Matrix egin:
 
 
+# # ----------------------------------------------------------------------------
+# # --------------------SCIKIT MODELOA KERNEL GAUSSIARRA--------------------------
+# # ----------------------------------------------------------------------------
+
+# # Modeloa inportatu
+Scikit_gauss = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_gauss.pkl"),"rb"))
+Scikit_gauss_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_gauss_info.pkl"),"rb"))
+
+# # Informazioa erakutsi:
+print("Nire modeloa, kernel gausiarra:")
+print(f"Behar izan duen denbora: {Scikit_gauss_info[0]}")
+print(f"Lortu duen asmatze-proportzioa: {Scikit_gauss_info[1]}")
+print()
+
+# Conffusion Matrix egin:
+
+# # Gaizki egindako predikzioak bisualizatu:
+fig, axs = plt.subplots(2,5, figsize = (12,8))
+k = random.randint(0, len(Y_test)-1)
+for i in range(2):
+    for j in range(5):
+        predikzioa =  Scikit_gauss.predict(np.array(X_test.iloc[k,:].tolist()).reshape(1,-1))[0]
+        zuzena = Y_test.iloc[k]
+        while predikzioa == zuzena:
+            k = random.randint(0, len(Y_test)-1)
+            predikzioa =  Scikit_gauss.predict(np.array(X_test.iloc[k,:].tolist()).reshape(1,-1))[0]
+            zuzena = Y_test.iloc[k]
+        adib = np.array(X_test.iloc[k, :])
+        adib = np.reshape(adib, (28,28))
+        axs[i,j].imshow(adib, cmap = "gray_r")
+        axs[i,j].axis("off")
+        axs[i,j].text(0.5,1,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
+        k += 1
+        print(i,j)
+
+plt.tight_layout(pad = 0)
+# plt.show()
+plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Scikit_gauss_gaizki_klasifikatuak.png"))
 
 
 
 
-# # # ----------------------------------------------------------------------------
-# # # --------------------SCIKIT MODELOA KERNEL POLINOMIALA-------------------------
-# # # ----------------------------------------------------------------------------
 
-# # # Modeloa inportatu
-# Scikit_poly = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_poly.pkl"),"rb"))
-# Scikit_poly_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_poly_info.pkl"),"rb"))
+# # ----------------------------------------------------------------------------
+# # --------------------SCIKIT MODELOA KERNEL POLINOMIALA-------------------------
+# # ----------------------------------------------------------------------------
 
-# # # Informazioa erakutsi:
+# # Modeloa inportatu
+Scikit_poly = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_poly.pkl"),"rb"))
+Scikit_poly_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_poly_info.pkl"),"rb"))
 
-# print("Nire modeloa, kernel polinomiala:")
-# print(f"Behar izan duen denbora: {Scikit_poly_info[0]}")
-# print(f"Lortu duen asmatze-proportzioa: {Scikit_poly_info[1]}")
-# print()
+# # Informazioa erakutsi:
 
+print("Nire modeloa, kernel polinomiala:")
+print(f"Behar izan duen denbora: {Scikit_poly_info[0]}")
+print(f"Lortu duen asmatze-proportzioa: {Scikit_poly_info[1]}")
+print()
+
+
+
+# # Gaizki egindako predikzioak bisualizatu:
+fig, axs = plt.subplots(2,5, figsize = (12,8))
+k = random.randint(0, len(Y_test)-1)
+for i in range(2):
+    for j in range(5):
+        predikzioa =  Scikit_poly.predict(np.array(X_test.iloc[k,:].tolist()).reshape(1,-1))[0]
+        zuzena = Y_test.iloc[k]
+        while predikzioa == zuzena:
+            k = random.randint(0, len(Y_test)-1)
+            predikzioa =  Scikit_poly.predict(np.array(X_test.iloc[k,:].tolist()).reshape(1,-1))[0]
+            zuzena = Y_test.iloc[k]
+        adib = np.array(X_test.iloc[k, :])
+        adib = np.reshape(adib, (28,28))
+        axs[i,j].imshow(adib, cmap = "gray_r")
+        axs[i,j].axis("off")
+        axs[i,j].text(0.5,1,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
+        k += 1
+        print(i,j)
+
+plt.tight_layout(pad = 0)
+# plt.show()
+plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Scikit_poly_gaizki_klasifikatuak.png"))
