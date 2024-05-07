@@ -30,7 +30,7 @@ Y_test = testeatzeko_datuak["label"]
 X_entrenamendu = X_entrenamendu / 255
 X_test = X_test / 255
 
-seed_number = 100
+seed_number = 123
 
 
 
