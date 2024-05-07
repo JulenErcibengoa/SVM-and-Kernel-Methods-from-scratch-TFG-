@@ -67,9 +67,8 @@ for i in range(2):
         adib = np.reshape(adib, (28,28))
         axs[i,j].imshow(adib, cmap = "gray_r")
         axs[i,j].axis("off")
-        axs[i,j].text(0.5,1,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
+        axs[i,j].text(0.5,1.2,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
         k += 1
-        print(i,j)
 
 plt.tight_layout(pad = 0)
 # plt.show()
@@ -111,9 +110,8 @@ for i in range(2):
         adib = np.reshape(adib, (28,28))
         axs[i,j].imshow(adib, cmap = "gray_r")
         axs[i,j].axis("off")
-        axs[i,j].text(0.5,1,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
+        axs[i,j].text(0.5,1.2,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
         k += 1
-        print(i,j)
 
 plt.tight_layout(pad = 0)
 # plt.show()
@@ -153,9 +151,8 @@ for i in range(2):
         adib = np.reshape(adib, (28,28))
         axs[i,j].imshow(adib, cmap = "gray_r")
         axs[i,j].axis("off")
-        axs[i,j].text(0.5,1,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
+        axs[i,j].text(0.5,1.2,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
         k += 1
-        print(i,j)
 
 plt.tight_layout(pad = 0)
 # plt.show()
@@ -197,9 +194,8 @@ for i in range(2):
         adib = np.reshape(adib, (28,28))
         axs[i,j].imshow(adib, cmap = "gray_r")
         axs[i,j].axis("off")
-        axs[i,j].text(0.5,1,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
+        axs[i,j].text(0.5,1.2,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
         k += 1
-        print(i,j)
 
 plt.tight_layout(pad = 0)
 # plt.show()
