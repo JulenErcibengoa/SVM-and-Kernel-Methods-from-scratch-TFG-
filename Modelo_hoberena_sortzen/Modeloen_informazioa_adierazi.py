@@ -118,12 +118,12 @@ print()
 
 # # Conffusion Matrix egin:
 
-predikzioak_Nire_gauss = Nire_gauss.predict_anitzkoitza(X_test.values)
-conf_matrix_Nire_gauss = confusion_matrix(Y_test.values, predikzioak_Nire_gauss, labels= np.unique(Y_test.values))
-pickle.dump(conf_matrix_Nire_gauss, open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_gauss"),"wb"))
-conf_matrix_Nire_gauss = pickle.load(open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_gauss"),"rb"))
+predikzioak_Nire_poly = Nire_poly.predict_anitzkoitza(X_test.values)
+conf_matrix_Nire_poly = confusion_matrix(Y_test.values, predikzioak_Nire_poly, labels= np.unique(Y_test.values))
+pickle.dump(conf_matrix_Nire_poly, open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_poly"),"wb"))
+conf_matrix_Nire_poly = pickle.load(open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_poly"),"rb"))
 
-matrizea = conf_matrix_Nire_gauss
+matrizea = conf_matrix_Nire_poly
 plt.figure(figsize=(8, 7))
 plt.imshow(matrizea, aspect= "equal")
 plt.xticks(np.arange(0, 10, 1), [r'${{{}}}$'.format(j) for j in range(10)], fontsize = 17)
@@ -138,7 +138,7 @@ plt.tight_layout(pad = 0.2)
 for i in range(matrizea.shape[0]):
     for j in range(matrizea.shape[1]):
         plt.text(j, i, '{:.0f}'.format(matrizea[i, j]), ha='center', va='center', color='white' if matrizea[i, j] < 500 else "black", fontsize = 15)
-plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Nire_gauss_conf_matrix.png"))
+plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Nire_poly_conf_matrix.png"))
 
 
 
