@@ -50,8 +50,29 @@ print(f"Lortu duen asmatze-proportzioa: {Nire_gauss_info[1]}")
 print()
 
 # # Conffusion Matrix egin:
+predikzioak_Nire_gauss = Nire_gauss.predict_anitzkoitza(X_test.values)
+conf_matrix_Nire_gauss = confusion_matrix(Y_test.values, predikzioak_Nire_gauss, labels= np.unique(Y_test.values))
+pickle.dump(conf_matrix_Nire_gauss, open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_gauss"),"wb"))
+conf_matrix_Nire_gauss = pickle.load(open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_gauss"),"rb"))
 
-# Nire_gauss_test_predikzioak = Nire_gauss.predict_anitzkoitza(X_test.values())
+matrizea = conf_matrix_Nire_gauss
+plt.figure(figsize=(8, 7))
+plt.imshow(matrizea, aspect= "equal")
+plt.xticks(np.arange(0, 10, 1), [r'${{{}}}$'.format(j) for j in range(10)], fontsize = 17)
+plt.xlabel("Predikzioa", fontsize = 20)
+plt.yticks(np.arange(0, 10, 1), [r'${{{}}}$'.format(j) for j in range(10)], fontsize = 17)
+plt.ylabel("Benetako balioa", fontsize = 20)
+# plt.title("Modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel gaussiarra")
+cbar = plt.colorbar()
+cbar.ax.tick_params(labelsize=10)
+plt.clim(0,1200)
+plt.tight_layout(pad = 0.2)
+for i in range(matrizea.shape[0]):
+    for j in range(matrizea.shape[1]):
+        plt.text(j, i, '{:.0f}'.format(matrizea[i, j]), ha='center', va='center', color='white' if matrizea[i, j] < 500 else "black", fontsize = 15)
+plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Nire_gauss_conf_matrix.png"))
+
+
 
 # # Gaizki egindako predikzioak bisualizatu:
 random.seed(123)
@@ -79,45 +100,69 @@ plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Nire_gauss_gaizki_klasifikat
 
 
 
-# # # ----------------------------------------------------------------------------
-# # # --------------------NIRE MODELOA KERNEL POLINOMIALA-------------------------
-# # # ----------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------
+# # --------------------NIRE MODELOA KERNEL POLINOMIALA-------------------------
+# # ----------------------------------------------------------------------------
 
-# # # Modeloa inportatu
-# Nire_poly = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Nire_modelo_hoberena_poly.pkl"),"rb"))
-# Nire_poly_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Nire_modelo_hoberena_poly_info.pkl"),"rb"))
+# # Modeloa inportatu
+Nire_poly = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Nire_modelo_hoberena_poly.pkl"),"rb"))
+Nire_poly_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Nire_modelo_hoberena_poly_info.pkl"),"rb"))
 
-# # # Informazioa erakutsi:
+# # Informazioa erakutsi:
 
-# print("Nire modeloa, kernel polinomiala:")
-# print(f"Behar izan duen denbora: {Nire_poly_info[0]}")
-# print(f"Lortu duen asmatze-proportzioa: {Nire_poly_info[1]}")
-# print()
-
-
+print("Nire modeloa, kernel polinomiala:")
+print(f"Behar izan duen denbora: {Nire_poly_info[0]}")
+print(f"Lortu duen asmatze-proportzioa: {Nire_poly_info[1]}")
+print()
 
 
-# # # Gaizki egindako predikzioak bisualizatu:
-# fig, axs = plt.subplots(2,5, figsize = (12,8))
-# k = random.randint(0, len(Y_test)-1)
-# for i in range(2):
-#     for j in range(5):
-#         predikzioa =  Nire_poly.predict(X_test.iloc[k,:])
-#         zuzena = Y_test.iloc[k]
-#         while predikzioa == zuzena:
-#             k = random.randint(0, len(Y_test)-1)
-#             predikzioa =  Nire_poly.predict(X_test.iloc[k,:])
-#             zuzena = Y_test.iloc[k]
-#         adib = np.array(X_test.iloc[k, :])
-#         adib = np.reshape(adib, (28,28))
-#         axs[i,j].imshow(adib, cmap = "gray_r")
-#         axs[i,j].axis("off")
-#         axs[i,j].text(0.5,1.2,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
-#         k += 1
+# # Conffusion Matrix egin:
 
-# plt.tight_layout(pad = 0)
-# # plt.show()
-# plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Nire_poly_gaizki_klasifikatuak.png"))
+predikzioak_Nire_gauss = Nire_gauss.predict_anitzkoitza(X_test.values)
+conf_matrix_Nire_gauss = confusion_matrix(Y_test.values, predikzioak_Nire_gauss, labels= np.unique(Y_test.values))
+pickle.dump(conf_matrix_Nire_gauss, open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_gauss"),"wb"))
+conf_matrix_Nire_gauss = pickle.load(open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_gauss"),"rb"))
+
+matrizea = conf_matrix_Nire_gauss
+plt.figure(figsize=(8, 7))
+plt.imshow(matrizea, aspect= "equal")
+plt.xticks(np.arange(0, 10, 1), [r'${{{}}}$'.format(j) for j in range(10)], fontsize = 17)
+plt.xlabel("Predikzioa", fontsize = 20)
+plt.yticks(np.arange(0, 10, 1), [r'${{{}}}$'.format(j) for j in range(10)], fontsize = 17)
+plt.ylabel("Benetako balioa", fontsize = 20)
+# plt.title("Modelo desberdinen asmatze proportzioa baliozta-multzoan:\nKernel gaussiarra")
+cbar = plt.colorbar()
+cbar.ax.tick_params(labelsize=10)
+plt.clim(0,1200)
+plt.tight_layout(pad = 0.2)
+for i in range(matrizea.shape[0]):
+    for j in range(matrizea.shape[1]):
+        plt.text(j, i, '{:.0f}'.format(matrizea[i, j]), ha='center', va='center', color='white' if matrizea[i, j] < 500 else "black", fontsize = 15)
+plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Nire_gauss_conf_matrix.png"))
+
+
+
+# # Gaizki egindako predikzioak bisualizatu:
+fig, axs = plt.subplots(2,5, figsize = (12,8))
+k = random.randint(0, len(Y_test)-1)
+for i in range(2):
+    for j in range(5):
+        predikzioa =  Nire_poly.predict(X_test.iloc[k,:])
+        zuzena = Y_test.iloc[k]
+        while predikzioa == zuzena:
+            k = random.randint(0, len(Y_test)-1)
+            predikzioa =  Nire_poly.predict(X_test.iloc[k,:])
+            zuzena = Y_test.iloc[k]
+        adib = np.array(X_test.iloc[k, :])
+        adib = np.reshape(adib, (28,28))
+        axs[i,j].imshow(adib, cmap = "gray_r")
+        axs[i,j].axis("off")
+        axs[i,j].text(0.5,1.2,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
+        k += 1
+
+plt.tight_layout(pad = 0)
+# plt.show()
+plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Nire_poly_gaizki_klasifikatuak.png"))
 
 
 
