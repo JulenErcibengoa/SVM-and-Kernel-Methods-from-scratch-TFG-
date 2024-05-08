@@ -50,9 +50,9 @@ print(f"Lortu duen asmatze-proportzioa: {Nire_gauss_info[1]}")
 print()
 
 # # Conffusion Matrix egin:
-predikzioak_Nire_gauss = Nire_gauss.predict_anitzkoitza(X_test.values)
-conf_matrix_Nire_gauss = confusion_matrix(Y_test.values, predikzioak_Nire_gauss, labels= np.unique(Y_test.values))
-pickle.dump(conf_matrix_Nire_gauss, open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_gauss"),"wb"))
+# predikzioak_Nire_gauss = Nire_gauss.predict_anitzkoitza(X_test.values)
+# conf_matrix_Nire_gauss = confusion_matrix(Y_test.values, predikzioak_Nire_gauss, labels= np.unique(Y_test.values))
+# pickle.dump(conf_matrix_Nire_gauss, open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_gauss"),"wb"))
 conf_matrix_Nire_gauss = pickle.load(open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_gauss"),"rb"))
 
 matrizea = conf_matrix_Nire_gauss
@@ -117,10 +117,9 @@ print()
 
 
 # # Conffusion Matrix egin:
-
-predikzioak_Nire_poly = Nire_poly.predict_anitzkoitza(X_test.values)
-conf_matrix_Nire_poly = confusion_matrix(Y_test.values, predikzioak_Nire_poly, labels= np.unique(Y_test.values))
-pickle.dump(conf_matrix_Nire_poly, open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_poly"),"wb"))
+# predikzioak_Nire_poly = Nire_poly.predict_anitzkoitza(X_test.values)
+# conf_matrix_Nire_poly = confusion_matrix(Y_test.values, predikzioak_Nire_poly, labels= np.unique(Y_test.values))
+# pickle.dump(conf_matrix_Nire_poly, open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_poly"),"wb"))
 conf_matrix_Nire_poly = pickle.load(open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Nire_poly"),"rb"))
 
 matrizea = conf_matrix_Nire_poly
@@ -176,7 +175,7 @@ Scikit_gauss = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modelo
 Scikit_gauss_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_gauss_info.pkl"),"rb"))
 
 # # Informazioa erakutsi:
-print("Nire modeloa, kernel gausiarra:")
+print("Scikit-learn modeloa, kernel gausiarra:")
 print(f"Behar izan duen denbora: {Scikit_gauss_info[0]}")
 print(f"Lortu duen asmatze-proportzioa: {Scikit_gauss_info[1]}")
 print()
@@ -207,27 +206,27 @@ plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Scikit_gauss_conf_matrix.png
 
 
 
-# # # Gaizki egindako predikzioak bisualizatu:
-# fig, axs = plt.subplots(2,5, figsize = (12,8))
-# k = random.randint(0, len(Y_test)-1)
-# for i in range(2):
-#     for j in range(5):
-#         predikzioa =  Scikit_gauss.predict(np.array(X_test.iloc[k,:].tolist()).reshape(1,-1))[0]
-#         zuzena = Y_test.iloc[k]
-#         while predikzioa == zuzena:
-#             k = random.randint(0, len(Y_test)-1)
-#             predikzioa =  Scikit_gauss.predict(np.array(X_test.iloc[k,:].tolist()).reshape(1,-1))[0]
-#             zuzena = Y_test.iloc[k]
-#         adib = np.array(X_test.iloc[k, :])
-#         adib = np.reshape(adib, (28,28))
-#         axs[i,j].imshow(adib, cmap = "gray_r")
-#         axs[i,j].axis("off")
-#         axs[i,j].text(0.5,1.2,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
-#         k += 1
+# # Gaizki egindako predikzioak bisualizatu:
+fig, axs = plt.subplots(2,5, figsize = (12,8))
+k = random.randint(0, len(Y_test)-1)
+for i in range(2):
+    for j in range(5):
+        predikzioa =  Scikit_gauss.predict(np.array(X_test.iloc[k,:].tolist()).reshape(1,-1))[0]
+        zuzena = Y_test.iloc[k]
+        while predikzioa == zuzena:
+            k = random.randint(0, len(Y_test)-1)
+            predikzioa =  Scikit_gauss.predict(np.array(X_test.iloc[k,:].tolist()).reshape(1,-1))[0]
+            zuzena = Y_test.iloc[k]
+        adib = np.array(X_test.iloc[k, :])
+        adib = np.reshape(adib, (28,28))
+        axs[i,j].imshow(adib, cmap = "gray_r")
+        axs[i,j].axis("off")
+        axs[i,j].text(0.5,1.2,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
+        k += 1
 
-# plt.tight_layout(pad = 0)
-# # plt.show()
-# plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Scikit_gauss_gaizki_klasifikatuak.png"))
+plt.tight_layout(pad = 0)
+# plt.show()
+plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Scikit_gauss_gaizki_klasifikatuak.png"))
 
 
 
@@ -243,7 +242,7 @@ Scikit_poly_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_mo
 
 # # Informazioa erakutsi:
 
-print("Nire modeloa, kernel polinomiala:")
+print("Scikit-learn modeloa, kernel polinomiala:")
 print(f"Behar izan duen denbora: {Scikit_poly_info[0]}")
 print(f"Lortu duen asmatze-proportzioa: {Scikit_poly_info[1]}")
 print()
@@ -275,24 +274,24 @@ plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Scikit_poly_conf_matrix.png"
 
 
 
-# # # Gaizki egindako predikzioak bisualizatu:
-# fig, axs = plt.subplots(2,5, figsize = (12,8))
-# k = random.randint(0, len(Y_test)-1)
-# for i in range(2):
-#     for j in range(5):
-#         predikzioa =  Scikit_poly.predict(np.array(X_test.values[k]).reshape(1,-1))[0]
-#         zuzena = Y_test.iloc[k]
-#         while predikzioa == zuzena:
-#             k = random.randint(0, len(Y_test)-1)
-#             predikzioa =  Scikit_poly.predict(np.array(X_test.values[k]).reshape(1,-1))[0]
-#             zuzena = Y_test.iloc[k]
-#         adib = np.array(X_test.iloc[k, :])
-#         adib = np.reshape(adib, (28,28))
-#         axs[i,j].imshow(adib, cmap = "gray_r")
-#         axs[i,j].axis("off")
-#         axs[i,j].text(0.5,1.2,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
-#         k += 1
+# # Gaizki egindako predikzioak bisualizatu:
+fig, axs = plt.subplots(2,5, figsize = (12,8))
+k = random.randint(0, len(Y_test)-1)
+for i in range(2):
+    for j in range(5):
+        predikzioa =  Scikit_poly.predict(np.array(X_test.values[k]).reshape(1,-1))[0]
+        zuzena = Y_test.iloc[k]
+        while predikzioa == zuzena:
+            k = random.randint(0, len(Y_test)-1)
+            predikzioa =  Scikit_poly.predict(np.array(X_test.values[k]).reshape(1,-1))[0]
+            zuzena = Y_test.iloc[k]
+        adib = np.array(X_test.iloc[k, :])
+        adib = np.reshape(adib, (28,28))
+        axs[i,j].imshow(adib, cmap = "gray_r")
+        axs[i,j].axis("off")
+        axs[i,j].text(0.5,1.2,f"Predikzioa =  {str(predikzioa)}\nZuzena = {str(zuzena)}", fontsize = 15, horizontalalignment = "center", verticalalignment = "top", transform = axs[i,j].transAxes)
+        k += 1
 
-# plt.tight_layout(pad = 0)
-# # plt.show()
-# plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Scikit_poly_gaizki_klasifikatuak.png"))
+plt.tight_layout(pad = 0)
+# plt.show()
+plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Scikit_poly_gaizki_klasifikatuak.png"))
