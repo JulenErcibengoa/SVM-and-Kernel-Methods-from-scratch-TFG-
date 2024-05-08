@@ -182,8 +182,8 @@ print()
 
 # # Conffusion Matrix egin:
 
-# predikzioak_Scikit_gauss = Scikit_gauss.predict(X_test)
-# conf_matrix_Scikit_gauss = confusion_matrix(Y_test, predikzioak_Scikit_gauss, labels= np.unique(Y_test.values))
+# predikzioak_Scikit_gauss = Scikit_gauss.predict(X_test.values)
+# conf_matrix_Scikit_gauss = confusion_matrix(Y_test.values, predikzioak_Scikit_gauss, labels= np.unique(Y_test.values))
 # pickle.dump(conf_matrix_Scikit_gauss, open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Scikit_gauss"),"wb"))
 conf_matrix_Scikit_gauss = pickle.load(open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Scikit_gauss"),"rb"))
 
@@ -250,8 +250,8 @@ print()
 
 # # Conffusion Matrix egin:
 
-# predikzioak_Scikit_poly = Scikit_poly.predict(X_test)
-# conf_matrix_Scikit_poly = confusion_matrix(Y_test, predikzioak_Scikit_poly, labels= np.unique(Y_test.values))
+# predikzioak_Scikit_poly = Scikit_poly.predict(X_test.values)
+# conf_matrix_Scikit_poly = confusion_matrix(Y_test.values, predikzioak_Scikit_poly, labels= np.unique(Y_test.values))
 # pickle.dump(conf_matrix_Scikit_poly, open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Scikit_poly"),"wb"))
 conf_matrix_Scikit_poly = pickle.load(open(os.path.join(oraingo_bidea, "Conf_matrix_gordeta", "conf_matrix_Scikit_poly"),"rb"))
 
