@@ -37,9 +37,9 @@ X_test = X_test / 255
 # # Modeloa sortu:
 modelo_gauss = SVC(C = 10, kernel = "rbf", gamma = 10**(-2))
 t0 = time.time()
-modelo_gauss.fit(X_entrenamendu, Y_entrenamendu)
+modelo_gauss.fit(X_entrenamendu.values, Y_entrenamendu.values)
 t1 = time.time()
-nota = modelo_gauss.score(X_test, Y_test)
+nota = modelo_gauss.score(X_test.values, Y_test.values)
 
 # # Informazioa gorde:
 modelo_gauss_info = []
@@ -66,9 +66,9 @@ pickle.dump(modelo_gauss_info, open(os.path.join(bide_orokorra, "Entrenatutako_m
 # # Modeloa sortu:
 modelo_poly = SVC(C=10, kernel = "poly", degree = 6, coef0 =1)
 t0 = time.time()
-modelo_poly.fit(X_entrenamendu, Y_entrenamendu)
+modelo_poly.fit(X_entrenamendu.values, Y_entrenamendu.values)
 t1 = time.time()
-nota = modelo_poly.score(X_test, Y_test)
+nota = modelo_poly.score(X_test.values, Y_test.values)
 
 # # Informazioa gorde:
 modelo_poly_info = []
