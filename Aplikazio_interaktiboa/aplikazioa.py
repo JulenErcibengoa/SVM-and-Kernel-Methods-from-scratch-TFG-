@@ -429,7 +429,7 @@ def SVM_bisuala():
         manager=manager)
     slider2 = pygame_gui.elements.UIHorizontalSlider(
         relative_rect=pygame.Rect((width - 230, height - 50 - 3 * botoien_distantzia - 30), (170, 20)),
-        start_value=8,  # Valor inicial del deslizador
+        start_value=10,  # Valor inicial del deslizador
         value_range=(0, 15),  # Rango de valores del deslizador
         manager=manager)
 
@@ -555,7 +555,7 @@ def SVM_bisuala():
         if j == 1: # Polinomiala
             parametroa = round(slider2.get_current_value()) + 2
         else:
-            parametroa = round(4 **(slider2.get_current_value() - 8),5)
+            parametroa = round(4 **(slider2.get_current_value() - 10),8)
 
 
         # Puntuak marraztu
