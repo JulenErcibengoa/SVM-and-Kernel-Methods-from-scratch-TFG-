@@ -64,32 +64,25 @@ Y_test = testeatzeko_datuak["label"]
 # ------------------------------MODELOAK INPORTATU-------------------------------
 # -------------------------------------------------------------------------------
 
-# Scikit-learn MODELOA:
-modeloa_sci = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","SkLearn_SVC_model_C_4.pkl"),"rb"))
-modeloa_sci_nota = 0.9843 # Modeloa sortzean kalkulatu dugu
+# Scikit modelo hoberena GAUSS:
+Scikit_modelo_hoberena_gauss = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_gauss.pkl"),"rb"))
+Scikit_modelo_hoberena_gauss_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_gauss_info.pkl"),"rb"))
+# print(Scikit_modelo_hoberena_gauss_info)
 
-# Nire MODELOA:
-modeloa_nirea = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Nire_SVC_modeloa_MNIST_iter10000.pkl"),"rb"))
-modeloa_nirea_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Informazioa_10000.pkl"),"rb"))
-modeloa_nirea_nota = 0.9456
-print(modeloa_nirea_info)
-print(modeloa_nirea.koeficient)
+# Scikit modelo hoberena POLY:
+Scikit_modelo_hoberena_poly = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_poly.pkl"),"rb"))
+Scikit_modelo_hoberena_poly_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_poly_info.pkl"),"rb"))
+# print(Scikit_modelo_hoberena_poly_info)
 
-modeloa_nirea.deg = 2
-modeloa_nirea.sigma = 0.1
+# Nire modelo hoberena GAUSS:
+Nire_modelo_hoberena_gauss = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Nire_modelo_hoberena_gauss.pkl"),"rb"))
+Nire_modelo_hoberena_gauss_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Nire_modelo_hoberena_gauss_info.pkl"),"rb"))
+# print(Nire_modelo_hoberena_gauss_info)
 
-
-
-
-# Honek ez badu funtzionatzen, ondorengo kodea exekutatu modelo berri bat sortzeko
-# (ctrl + k + u, deskomentatzeko): 
-
-# modeloa = SVC(C = 4)
-# hasierako_denbora = time.time()
-# modeloa.fit(X_entrenamendu.values,Y_entrenamendu) # .values egiten dugu horrela zutabeen
-# # izenak ez dira beharrezkoak aurresaterako garaian
-# amaierako_denbora = time.time()
-# print(f"Entrenatzeko beharrezko denbora: {amaierako_denbora-hasierako_denbora}s")
+# Nire modelo hoberena POLY:
+Nire_modelo_hoberena_poly = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Nire_modelo_hoberena_poly.pkl"),"rb"))
+Nire_modelo_hoberena_poly_info = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Nire_modelo_hoberena_poly_info.pkl"),"rb"))
+# print(Nire_modelo_hoberena_poly_info)
 
 
 
@@ -293,8 +286,13 @@ def predezitu():
     garbitzen = False
     zenbakia = np.zeros((n,n),dtype=int)
     predikzioa = "1"
-    zein_modelo = "SciKit-Learn modeloa"
-    modeloaren_nota = modeloa_sci_nota
+    modeloak = [Scikit_modelo_hoberena_gauss, Scikit_modelo_hoberena_poly, Nire_modelo_hoberena_gauss, Nire_modelo_hoberena_poly]
+    modeloen_informazioak = [Scikit_modelo_hoberena_gauss_info, Scikit_modelo_hoberena_poly_info, Nire_modelo_hoberena_gauss_info, Nire_modelo_hoberena_poly_info]
+    modeloen_izenak = ["Scikit kernel gaussiarra", "Scikit kernel polinomiala", "Nirea, kernel gaussiarra", "Nirea, kernel polinomiala"]
+    zein_modelo_indize = 0
+    modeloa = modeloak[zein_modelo_indize]
+    modeloaren_informazioa = modeloen_informazioak[zein_modelo_indize]
+
 
 
     # Textuak idazteko beharrezkoa:
@@ -314,11 +312,10 @@ def predezitu():
 
     # Loop orokorra
     while running:
-        if np.array_equal(zenbakia,np.zeros((n,n),dtype=int)):
+        if np.array_equal(zenbakia,np.zeros((n,n))):
             predikzioa = "?"
-        elif zein_modelo == "SciKit-Learn modeloa":
-           predikzioa = modeloa_sci.predict(zenbakia.reshape((1,n**2)))[0]
-
+        elif zein_modelo_indize == 0 or zein_modelo_indize == 1: # Scikit modeloen kasuan:
+           predikzioa = modeloa.predict(zenbakia.reshape((1,n**2)) / 255)[0]
             # berria = zenbakia.reshape((1,n**2)) / 255
             # predikzioa = modeloa_nirea.predict(berria.tolist()[0])
 
@@ -327,8 +324,8 @@ def predezitu():
             if event.type == pygame.QUIT: # Exekutatzeaz bukatzeko
                 running = False
                 zer_egin = "amaitu"
-            elif keys[pygame.K_RETURN]: # Enter botoia sakatzerakoan
-                zenbakia = np.zeros((n,n),dtype=int)
+            elif keys[pygame.K_RETURN]: # Enter botoia sakatzerakoan pantaila garbitu
+                zenbakia = np.zeros((n,n))
             elif event.type == pygame.MOUSEBUTTONDOWN: # Xaguaren botoiren bat sakatzen bada
                 if event.button == 1: # Ezkerreko botoia sakatzen bada
                     if botoia_itzuli_menura.rect.collidepoint(event.pos):
@@ -336,17 +333,16 @@ def predezitu():
                         zer_egin = "menua_ireki"
                     elif botoia_garbitu.rect.collidepoint(event.pos):
                         zenbakia = np.zeros((n,n))
-                    elif botoia_modeloa_aldatu.rect.collidepoint(event.pos):
-                        if zein_modelo == "SciKit-Learn modeloa":
-                            zein_modelo = "Nire modeloa"
-                            modeloaren_nota = modeloa_nirea_nota
+                    elif botoia_modeloa_aldatu.rect.collidepoint(event.pos): # Modeloz aldatu
+                        zein_modelo_indize = (zein_modelo_indize + 1) % 4
+                        if zein_modelo_indize == 2 or zein_modelo_indize == 3:
                             predikzioa = "?"
-                        else:
-                            zein_modelo = "SciKit-Learn modeloa"
-                            modeloaren_nota = modeloa_sci_nota
-                    elif botoia_predezitu.rect.collidepoint(event.pos) and zein_modelo == "Nire modeloa":
+                        modeloa = modeloak[zein_modelo_indize]
+                        modeloaren_informazioa = modeloen_informazioak[zein_modelo_indize]
+
+                    elif botoia_predezitu.rect.collidepoint(event.pos) and (zein_modelo_indize == 2 or zein_modelo_indize == 3):
                         berria = zenbakia.reshape((1,n**2)) / 255
-                        predikzioa = modeloa_nirea.predict(berria.tolist()[0])
+                        predikzioa = modeloa.predict(berria.tolist()[0])
                     else:    
                         marrazten = True
                         x,y = event.pos
@@ -382,13 +378,13 @@ def predezitu():
         screen.blit(izenburua.render("Modeloaren predikzioa", True, TEXT_COLOR),(width - 290, 20))
         screen.blit(digitua.render(str(predikzioa), True, BLACK),(width - 215, 80))
         screen.blit(instrukzioak.render("Sakatu 'enter' irudia garbitzeko", True, TEXT_COLOR),(width - 295, 55))
-        screen.blit(zein_modelo_font.render(zein_modelo, True, TEXT_COLOR),(width - 295, 250))
-        screen.blit(modelo_letrak.render(f"Modeloaren nota = {modeloaren_nota}", True, TEXT_COLOR),(width - 295, 275))
+        screen.blit(zein_modelo_font.render(modeloen_izenak[zein_modelo_indize], True, TEXT_COLOR),(width - 295, 250))
+        screen.blit(modelo_letrak.render(f"Modeloaren nota = {modeloaren_informazioa[1]}", True, TEXT_COLOR),(width - 295, 275))
         
         botoia_itzuli_menura.draw(screen)
         botoia_garbitu.draw(screen)
         botoia_modeloa_aldatu.draw(screen)
-        if zein_modelo == "Nire modeloa":
+        if zein_modelo_indize == 2 or zein_modelo_indize == 3:
             botoia_predezitu.draw(screen)
             screen.blit(oharra.render("Nire modeloak denbora gehiago", True, RED),(width - 295, 290))
             screen.blit(oharra.render("behar du predezitzeko", True, RED),(width - 295, 305))
@@ -573,9 +569,10 @@ def menua():
     izenburua = pygame.font.Font(None, 107)
 
     # Botoia:
-    botoia_adibideak_ikusi = Botoia(width//2-350//2, height // 2 + botoien_dist * 1, 350, 40, BUTTON_COLOR, "Ikusi MNIST-en adibideak")
-    botoia_digituak_predezitu = Botoia(width//2-350//2, height // 2 + botoien_dist * 2 , 350, 40, BUTTON_COLOR, "Marraztu digituak modeloak aurresateko")
-    botoia_SVC_bisualizadorea = Botoia(width//2-350//2, height // 2 + botoien_dist * 3 , 350, 40, BUTTON_COLOR, "Sortu laginak eta SVM modeloak")
+    botoia_SVC_bisualizadorea = Botoia(width//2-350//2, height // 2 + botoien_dist * 1, 350, 40, BUTTON_COLOR, "Sortu laginak eta SVM modeloak")
+    botoia_adibideak_ikusi = Botoia(width//2-350//2, height // 2 + botoien_dist * 2 , 350, 40, BUTTON_COLOR, "Ikusi MNIST-en adibideak")
+    botoia_digituak_predezitu = Botoia(width//2-350//2, height // 2 + botoien_dist * 3 , 350, 40, BUTTON_COLOR, "Marraztu digituak modeloak aurresateko")
+
     botoia_irten = Botoia(width//2-350//2, height // 2 + botoien_dist * 4, 350, 40, BUTTON_COLOR, "Irten")
 
     # Loop orokorra
