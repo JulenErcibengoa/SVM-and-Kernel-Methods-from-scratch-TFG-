@@ -143,7 +143,7 @@ def digituak_garbitu(zenbakia,errenkada,zutabea):
         if 0 <= errenk < n and 0 <= zut < n:
             zenbakia[errenk][zut] = 0
 
-def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 4,modelo_mota = "Scikit modeloa"):
+def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 4,modelo_mota = "Scikit modeloa", parametroa = 2):
     X = np.array(puntuak)
     Y = np.array(izenak)
     mean = np.mean(X,0)
@@ -154,20 +154,33 @@ def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 
     print(f"INFO \n{kernel_mota},{modelo_mota}\n")
     if modelo_mota == "Scikit modeloa":
         if kernel_mota == "kernel gaussiarra":
-            model = SVC(C = koefizientea, kernel = "rbf")
+            model = SVC(C = koefizientea, kernel = "rbf", gamma = parametroa)
         elif kernel_mota == "kernel polinomiala":
-            model = SVC(C = koefizientea, kernel = "poly",coef0=1)
+            model = SVC(C = koefizientea, kernel = "poly",coef0=1, degree= int(parametroa))
         elif kernel_mota == "kernel lineala":
             model = SVC(C = koefizientea, kernel = "linear")
     else:
-        model = Nire_SGD_kernelekin(koeficient= koefizientea, kernel = kernel_mota)
+        model = Nire_SGD_kernelekin(koeficient= koefizientea, kernel = kernel_mota, sigma= parametroa, deg= int(parametroa))
 
 
     #print(f"Modeloaren parametroak = \n{model.get_params()}")
     model.fit(X,Y)
 
-    # Datuen minimo eta maximoak
+    # Izenak aldatzeko:
+    koefiziente_izena = "C" if modelo_mota == "Scikit modeloa" else u"\u03BB"
+    parametro_izena = u"\u03C3" if modelo_mota != "Scikit modeloa" else u"\u03B3"
 
+    if kernel_mota == "kernel polinomiala":
+        parametro_izena = "maila"
+    
+    if kernel_mota == "kernel lineala":
+        testua = f'Modeloaren erabaki-gainazala <br><sup>Modelo mota = {modelo_mota}, Kernel = {kernel_mota}, {koefiziente_izena} = {koefizientea}, Asmatze proportzioa = {round(model.score(X,Y),3)}</sup>'
+    else:
+        testua = f'Modeloaren erabaki-gainazala <br><sup>Modelo mota = {modelo_mota}, Kernel = {kernel_mota}, {koefiziente_izena} = {koefizientea}, {parametro_izena} = {parametroa}, Asmatze proportzioa = {round(model.score(X,Y),3)}</sup>'
+
+
+
+    # Datuen minimo eta maximoak
     h = 0.01 if modelo_mota == "Scikit modeloa" else 0.1
     x_min, x_max = np.min(X[:, 0]) - 0.2, np.max(X[:, 0]) + 0.2
     y_min, y_max = np.min(X[:, 1]) - 0.2, np.max(X[:, 1]) + 0.2
@@ -202,7 +215,7 @@ def modeloa_sortu(puntuak,izenak,kernel_mota="kernel gaussiarra",koefizientea = 
     fig.update_layout(
     xaxis_title=r'$x_1$',
     yaxis_title=r'$x_2$',
-    title=f'Modeloaren erabaki-gainazala <br><sup>Modelo mota = {modelo_mota}, Kernel = {kernel_mota}, C = {koefizientea}, Asmatze proportzioa = {round(model.score(X,Y),3)}</sup>',
+    title=testua,
     
 )
     fig.show()
@@ -410,9 +423,14 @@ def SVM_bisuala():
     # Modeloaren koefizientea aldatzeko barra sortzeko:
     manager = pygame_gui.UIManager((width, height))
     slider = pygame_gui.elements.UIHorizontalSlider(
-        relative_rect=pygame.Rect((width - 230, height - 50 - 3 * botoien_distantzia - 30), (170, 20)),
+        relative_rect=pygame.Rect((width - 230, height - 50 - 3 * botoien_distantzia - 30 - 20), (170, 20)),
         start_value=0,  # Valor inicial del deslizador
         value_range=(-4, 5),  # Rango de valores del deslizador
+        manager=manager)
+    slider2 = pygame_gui.elements.UIHorizontalSlider(
+        relative_rect=pygame.Rect((width - 230, height - 50 - 3 * botoien_distantzia - 30), (170, 20)),
+        start_value=0,  # Valor inicial del deslizador
+        value_range=(0, 15),  # Rango de valores del deslizador
         manager=manager)
 
     # Beharrezko hainbat aldagai
@@ -431,6 +449,8 @@ def SVM_bisuala():
     zein_kernel = "kernel gaussiarra"
     zein_modelo = "Scikit modeloa"
     koefizientea = 1
+    parametroa = 2
+    parametro_mota = u"\u03B3"
 
     # Textuak idazteko beharrezkoa:
     izenburua = pygame.font.Font(None, 37)
@@ -453,7 +473,7 @@ def SVM_bisuala():
                 zer_egin = "amaitu"
             elif keys[pygame.K_RETURN]: # Enter botoia sakatzerakoan
                 if not(len(gorriak) == 0 or len(berdeak) == 0):
-                    modeloa_sortu(puntu_guztiak,izenak,zein_kernel,koefizientea,modelo_mota=zein_modelo)
+                    modeloa_sortu(puntu_guztiak,izenak,zein_kernel,koefizientea,modelo_mota=zein_modelo, parametroa = parametroa)
 
             elif event.type == pygame.MOUSEBUTTONDOWN: # Xaguaren botoiren bat sakatzen bada
                 if event.button == 1: # Ezkerreko botoia sakatzen bada
@@ -467,14 +487,26 @@ def SVM_bisuala():
                         izenak = []
                         puntu_guztiak = []
                     elif botoia_kernel_mota.rect.collidepoint(event.pos):
-                        j += 1
-                        zein_kernel = kernel_motak[j % 3]
+                        j = (j + 1)%3
+                        zein_kernel = kernel_motak[j]
+                        if j == 0 and zein_modelo == "Scikit modeloa": # Kernel gaussiarraren kasuan:
+                            parametro_mota = u"\u03B3"
+                        elif j == 0 and zein_modelo == "Nire modeloa":
+                            parametro_mota = u"\u03C3"
+                        elif j == 1:
+                            parametro_mota = "maila"
                     
                     elif botoia_modeloz_aldatu.rect.collidepoint(event.pos):
                         if zein_modelo == "Scikit modeloa":
                             zein_modelo = "Nire modeloa"
                         else:
                             zein_modelo = "Scikit modeloa"
+                        if j == 0 and zein_modelo == "Scikit modeloa": # Kernel gaussiarraren kasuan:
+                            parametro_mota = u"\u03B3"
+                        elif j == 0 and zein_modelo == "Nire modeloa":
+                            parametro_mota = u"\u03C3"
+                        elif j == 1:
+                            parametro_mota = "maila"
 
                     else: # Puntu berdeak marrazteko   
                         marrazten = True
@@ -519,6 +551,13 @@ def SVM_bisuala():
         manager.draw_ui(screen)
         koefizientea = round(2**(slider.get_current_value()),3)
 
+        # Parametroa lortu
+        if j == 1: # Polinomiala
+            parametroa = round(slider2.get_current_value()) + 2
+        else:
+            parametroa = round(4 **(slider2.get_current_value() - 8),5)
+
+
         # Puntuak marraztu
         for punto in berdeak:
             pygame.draw.circle(screen, GREEN, punto, 5)
@@ -531,12 +570,15 @@ def SVM_bisuala():
         screen.blit(instrukzioak.render("- Kontuz! Puntu berde eta gorri kopurua", True, TEXT_COLOR),(width - 295, 95))
         screen.blit(instrukzioak.render("  antzekoa izan dadila, bestela baliteke", True, TEXT_COLOR),(width - 295, 115))
         screen.blit(instrukzioak.render("  modelorik ez lortzea!", True, TEXT_COLOR),(width - 295, 135))
-        screen.blit(puntuak.render(f"Puntu berde kopurua = {len(berdeak)}", True, (0,100,0)),(width - 295, 175))
-        screen.blit(puntuak.render(f"Puntu gorri kopurua = {len(gorriak)}", True, (100,0,0)),(width - 295, 195))
-        screen.blit(puntuak.render(f"Modelo mota:", True, TEXT_COLOR),(width - 295, 215))
-        screen.blit(puntuak.render(zein_modelo, True, TEXT_COLOR),(width - 270, 235))
-        screen.blit(puntuak.render(zein_kernel, True, TEXT_COLOR),(width - 270, 255))
-        screen.blit(puntuak.render(f"C = {koefizientea}", True, TEXT_COLOR),(width - 270, 275))
+        screen.blit(puntuak.render(f"Puntu berde kopurua = {len(berdeak)}", True, (0,100,0)),(width - 295, 175 - 25))
+        screen.blit(puntuak.render(f"Puntu gorri kopurua = {len(gorriak)}", True, (100,0,0)),(width - 295, 195- 25))
+        screen.blit(puntuak.render(f"Modelo mota:", True, TEXT_COLOR),(width - 295, 215- 25))
+        screen.blit(puntuak.render(zein_modelo, True, TEXT_COLOR),(width - 270, 235- 25))
+        screen.blit(puntuak.render(zein_kernel, True, TEXT_COLOR),(width - 270, 255- 25))
+        elementua = "C" if zein_modelo == "Scikit modeloa" else u"\u03BB"
+        screen.blit(puntuak.render(f"{elementua} = {koefizientea}", True, TEXT_COLOR),(width - 270, 275- 25))
+        if j != 2:
+            screen.blit(puntuak.render(f"{parametro_mota} = {parametroa}", True, TEXT_COLOR),(width - 270, 295- 25))
         botoia_itzuli_menura.draw(screen)
         botoia_garbitu.draw(screen)
         botoia_modeloz_aldatu.draw(screen)
