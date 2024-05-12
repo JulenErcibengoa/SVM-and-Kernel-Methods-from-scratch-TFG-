@@ -429,7 +429,7 @@ def SVM_bisuala():
         manager=manager)
     slider2 = pygame_gui.elements.UIHorizontalSlider(
         relative_rect=pygame.Rect((width - 230, height - 50 - 3 * botoien_distantzia - 30), (170, 20)),
-        start_value=0,  # Valor inicial del deslizador
+        start_value=8,  # Valor inicial del deslizador
         value_range=(0, 15),  # Rango de valores del deslizador
         manager=manager)
 
@@ -449,7 +449,7 @@ def SVM_bisuala():
     zein_kernel = "kernel gaussiarra"
     zein_modelo = "Scikit modeloa"
     koefizientea = 1
-    parametroa = 2
+    parametroa = 8
     parametro_mota = u"\u03B3"
 
     # Textuak idazteko beharrezkoa:
