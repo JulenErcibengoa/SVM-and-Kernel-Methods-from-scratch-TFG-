@@ -28,9 +28,9 @@ plt.ylim([-1,3])
 plt.scatter([1],[0.5], c="green", s = 400, marker= "+")
 plt.quiver(0,0,1,1, angles='xy', scale_units='xy', scale=1)
 
-plt.xlabel(r"$x$",fontsize = 20)
+plt.xlabel(r"$x_1$",fontsize = 20)
 
-plt.ylabel(r"$y$",fontsize = 20, rotation = 0)
+plt.ylabel(r"$x_2$",fontsize = 20, rotation = 0)
 plt.text(.5,.8, r"$w$",fontsize = 20)
 
 
