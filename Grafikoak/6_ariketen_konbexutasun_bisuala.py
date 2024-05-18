@@ -16,11 +16,11 @@ plt.vlines(x = 0, ymin = -2, ymax = 4, colors = "black")
 plt.hlines(y = 0, xmin = -2, xmax = 4, colors = "black")
 # plt.grid()
 
-plt.plot(x,y1, linestyle = "--", label =  r"$x + y - 1 = 0$")
+plt.plot(x,y1, linestyle = "--", label =  r"$x_1 + x_2 - 1 = 0$")
 
-plt.plot(x,y,label = r"$x + y - 2 = 0$")
+plt.plot(x,y,label = r"$x_1 + x_2 - 2 = 0$")
 
-plt.plot(x,y2, linestyle = "dotted", label =  r"$x + y - 3 = 0$")
+plt.plot(x,y2, linestyle = "dotted", label =  r"$x_1 + x_2 - 3 = 0$")
 
 plt.xlim([-1,3])
 plt.ylim([-1,3])
