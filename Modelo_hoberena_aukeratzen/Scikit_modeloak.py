@@ -15,9 +15,9 @@ import matplotlib.pyplot as plt
 
 
 
-# # ----------------------------------------------------------------------------
-# # -------------------------DATU BASEA INPORTATU-------------------------------
-# # ----------------------------------------------------------------------------
+# # ------------------------
+# # --DATU BASEA INPORTATU--
+# # ------------------------
 mnist_test_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_test.csv")
 mnist_train_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_train.csv")
 
@@ -35,15 +35,17 @@ print()
 print("Testeko klaseen agertze proportzioa:")
 print(Y_test.value_counts()/len(Y_test))
 print()
-# # ----------------------------------------------------------------------------
-# # ----------------------------------------------------------------------------
-# # ----------------------------------------------------------------------------
+# # -----------------------
+# # -----------------------
+# # -----------------------
 
 
 
-# # ----------------------------------------------------------------------------
-# # -----INFORMAZIOA GORDETZEKO LEKUAK SORTU (LEHENENGO ALDIZ EJEKUTATZEAN)-----
-# # ----------------------------------------------------------------------------
+# # -----------------------
+# # -----INFORMAZIOA GORDETZEKO
+# #  LEKUAK SORTU (LEHENENGO ALDIZ 
+# # EJEKUTATZEAN)-----
+# # -----------------------
 # # Hau lehenengo aldiz exekutatzean bakarrik exekutatu, bestela informazioa galdu egingo da
 
 # Notak_matrizea_rbf = np.zeros((7,7))
@@ -57,15 +59,17 @@ print()
 # with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Modeloen_notak.txt'), 'w') as informazioa:
 #     informazioa.write("Scikit-Learn modelo desberdinak, kernel gaussiarra\n\n")
 
-# # ----------------------------------------------------------------------------
-# # ----------------------------------------------------------------------------
-# # ----------------------------------------------------------------------------
+# # -------------------
+# # -------------------
+# # -------------------
 
 
 
-# # ----------------------------------------------------------------------------
-# # -------INFORMAZIOA GORDETZEKO LEKUAK IREKI (LEHENENGO ITERAZIOAN EZ)--------
-# # ----------------------------------------------------------------------------
+# # ------------------- 
+# # -------INFORMAZIOA 
+# # GORDETZEKO LEKUAK IREKI 
+# (LEHENENGO ITERAZIOAN EZ)
+# # ------------------- 
 
 Notak_matrizea_rbf = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_rbf.pkl"),"rb"))
 Notak_matrizea_poly = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_poly.pkl"),"rb"))
@@ -131,9 +135,9 @@ plt.tight_layout(pad = 0.2)
 #         plt.text(j, i, '{:.1f}'.format(Notak_matrizea_poly_handia[i, j]), ha='center', va='center', color='white' if Notak_matrizea_poly_handia[i, j] < 0.5 else "black")
 plt.show()
 
-# # ----------------------------------------------------------------------------
-# # ----------------------------------------------------------------------------
-# # ----------------------------------------------------------------------------
+# # ----------------------- 
+# # ----------------------- 
+# # ----------------------- 
 
 
 
@@ -173,9 +177,9 @@ def entrenatu (C,param,kernela,i,j,Nota_matrizea):
 
 
 
-# # ----------------------------------------------------------------------------
-# # ----------------------------KERNEL GAUSSIARRA-------------------------------
-# # ----------------------------------------------------------------------------
+# # ---------------------- 
+# # ---KERNEL GAUSSIARRA-- 
+# # ---------------------- 
 
 # # Parametroak:
 C_parametroak = np.logspace(-3, 3, 7) 
@@ -192,9 +196,9 @@ for i,C in enumerate(C_parametroak):
 
 
 
-# # ----------------------------------------------------------------------------
-# # ----------------------------KERNEL POLINOMIALA------------------------------
-# # ----------------------------------------------------------------------------
+# # --------------------- 
+# # --KERNEL POLINOMIALA-
+# # --------------------- 
         
 # with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Modeloen_notak.txt'), 'a') as informazioa:
 #     informazioa.write("\n\nScikit-Learn modelo desberdinak, kernel polinomiala\n\n")
@@ -214,9 +218,9 @@ for i,C in enumerate(C_parametroak):
 
 
 
-# # ----------------------------------------------------------------------------
-# # -------------------------KERNEL POLINOMIAL HANDIA---------------------------
-# # ----------------------------------------------------------------------------
+# # ----------------- 
+# # KERNEL POLINOMIAL HANDIA-
+# # -----------------
         
 # with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Modeloen_notak.txt'), 'a') as informazioa:
 #     informazioa.write("\n\nScikit-Learn modelo desberdinak, kernel polinomiala: bertsio handitua\n\n")
@@ -249,23 +253,6 @@ plt.tight_layout(pad = 0.2)
 #     for j in range(Notak_matrizea_poly_handia.shape[1]):
 #         plt.text(j, i, '{:.1f}'.format(Notak_matrizea_poly_handia[i, j]), ha='center', va='center', color='white' if Notak_matrizea_poly_handia[i, j] < 0.5 else "black")
 plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # with open('Modeloen_notak.txt', 'r') as informazioa:

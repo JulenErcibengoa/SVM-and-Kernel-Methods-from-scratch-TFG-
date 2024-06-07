@@ -14,12 +14,9 @@ import random
 
 
 
-
-
-
-# # ----------------------------------------------------------------------------
-# # -------------------------DATU BASEA INPORTATU-------------------------------
-# # ----------------------------------------------------------------------------
+# # -------------------------------
+# # ------DATU BASEA INPORTATU-----
+# # -------------------------------
 mnist_test_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_test.csv")
 mnist_train_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_train.csv")
 
@@ -37,20 +34,16 @@ print()
 print("Testeko klaseen agertze proportzioa:")
 print(Y_test.value_counts()/len(Y_test))
 print()
-# # ----------------------------------------------------------------------------
-# # ----------------------------------------------------------------------------
-# # ----------------------------------------------------------------------------
+# # -------------------------------
+# # -------------------------------
+# # -------------------------------
 
 
 
-
-
-
-
-
-# # ----------------------------------------------------------------------------
-# # -----INFORMAZIOA GORDETZEKO LEKUAK SORTU (LEHENENGO ALDIZ EJEKUTATZEAN)-----
-# # ----------------------------------------------------------------------------
+# # --------------------------------
+# # INFORMAZIOA GORDETZEKO LEKUAK 
+# # SORTU (LEHENENGO ALDIZ EJEKUTATZEAN)
+# # --------------------------------
 # # Hau lehenengo aldiz exekutatzean bakarrik exekutatu, bestela informazioa galdu egingo da
 
 # Notak_matrizea_Nire_rbf = np.zeros((7,7))
@@ -64,17 +57,15 @@ print()
 # with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Nire_modeloen_notak.txt'), 'w') as informazioa:
 #     informazioa.write("Nire modelo desberdinak, kernel gaussiarra\n\n")
 
-# # ----------------------------------------------------------------------------
-# # ----------------------------------------------------------------------------
-# # ----------------------------------------------------------------------------
+# # -----------------------------
+# # -----------------------------
+# # -----------------------------
 
 
-
-
-
-# # ----------------------------------------------------------------------------
-# # -------INFORMAZIOA GORDETZEKO LEKUAK IREKI (LEHENENGO ITERAZIOAN EZ)--------
-# # ----------------------------------------------------------------------------
+# # --------------------------------
+# # INFORMAZIOA GORDETZEKO LEKUAK 
+# # IREKI (LEHENENGO ITERAZIOAN EZ)
+# # --------------------------------
 
 Notak_matrizea_Nire_rbf = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_Nire_rbf.pkl"),"rb"))
 Notak_matrizea_Nire_rbf_handitua = pickle.load(open(os.path.join(oraingo_bidea,"Modeloen_informazioa","Notak_matrizea_Nire_rbf_handitua.pkl"),"rb"))
@@ -160,13 +151,9 @@ for i in range(matrizea.shape[0]):
 plt.show()
 
 
-
-
-
-
-# # ----------------------------------------------------------------------------
-# # ----------------------------------------------------------------------------
-# # ----------------------------------------------------------------------------
+# # ---------------------------
+# # ---------------------------
+# # ---------------------------
 
 
 
@@ -208,9 +195,9 @@ def entrenatu (C,param,kernela,i,j,Nota_matrizea):
 
 
 
-# # ----------------------------------------------------------------------------
-# # ----------------------------KERNEL GAUSSIARRA-------------------------------
-# # ----------------------------------------------------------------------------
+# # ----------------------------
+# # -----KERNEL GAUSSIARRA------
+# # ----------------------------
 
 # # Parametroak:
 C_parametroak = np.logspace(-3, 3, 7) 
@@ -226,9 +213,10 @@ for i,C in enumerate(C_parametroak):
 
 
 
-# # ----------------------------------------------------------------------------
-# # -------------------KERNEL GAUSSIARRA MATRIZE HANDITUA-----------------------
-# # ----------------------------------------------------------------------------
+# # -------------------------
+# #    KERNEL GAUSSIARRA
+# #    MATRIZE HANDITUA
+# # -------------------------
 
 # with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Nire_modeloen_notak.txt'), 'a') as informazioa:
 #     informazioa.write("\n\nNire modelo desberdinak, kernel gaussiarra, bertsio handitua\n\n")
@@ -248,9 +236,9 @@ for i in  range(len(C_parametroak)-1,-1,-1):
 
 
 
-# # ----------------------------------------------------------------------------
-# # ----------------------------KERNEL POLINOMIALA------------------------------
-# # ----------------------------------------------------------------------------
+# # ----------------------
+# # --KERNEL POLINOMIALA--
+# # ----------------------
         
 # with open(os.path.join(oraingo_bidea, "Modeloen_informazioa",'Nire_modeloen_notak.txt'), 'a') as informazioa:
 #     informazioa.write("\n\nNire modelo desberdinak, kernel polinomiala\n\n")

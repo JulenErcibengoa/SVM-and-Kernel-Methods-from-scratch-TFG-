@@ -25,10 +25,10 @@ y6 = 1.81999 + 1/3*(x-0.26)
 # Grafikoa sortu: 
 
 
-plt.plot(x, y3, label = 'Margin txikia', linestyle = "dotted", alpha = 0.5, c = "tab:blue")
-plt.plot(x, y4, label = 'Margin txikia', linestyle = "dotted", alpha = 0.5, c = "tab:blue")
-plt.plot(x, y5, label = 'Margin txikia', linestyle = "dotted", alpha = 0.5, c = "tab:orange")
-plt.plot(x, y6, label = 'Margin txikia', linestyle = "dotted", alpha = 0.5, c = "tab:orange")
+plt.plot(x, y3, label = 'Margin txikia', linestyle = "dotted", alpha = 0.7, c = "tab:blue")
+plt.plot(x, y4, label = 'Margin txikia', linestyle = "dotted", alpha = 0.7, c = "tab:blue")
+plt.plot(x, y5, label = 'Margin txikia', linestyle = "dotted", alpha = 0.7, c = "tab:orange")
+plt.plot(x, y6, label = 'Margin txikia', linestyle = "dotted", alpha = 0.7, c = "tab:orange")
 
 
 
@@ -67,7 +67,7 @@ plt.plot([1, 13/20], [-0.4, -0.05], color='black',linewidth = 2)
 plt.plot([1, 63/100], [-0.4, 71/100], color='black',linewidth = 2)
 plt.scatter([1],[-0.4], color='red', marker='_', s = 500, linewidth = 4)
 
-l =plt.legend(handles = [hiper_1, hiper_2] ,fontsize = 15, loc = 'lower left')
-l.get_frame().set_alpha(1) 
+l = plt.legend(handles=[hiper_1, hiper_2], fontsize=15, loc='center left', bbox_to_anchor=(1, 0.5))
+l.get_frame().set_alpha(1)
 
 plt.show()

@@ -13,9 +13,10 @@ import time
 import pickle
 import random
 
-# # ----------------------------------------------------------------------------
-# # -------------------------DATU BASEA INPORTATU-------------------------------
-# # ----------------------------------------------------------------------------
+# # -------------------------------
+# # ------DATU BASEA INPORTATU-----
+# # -------------------------------
+
 mnist_test_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_test.csv")
 mnist_train_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_train.csv")
 
@@ -33,10 +34,10 @@ X_test = X_test / 255
 seed_number = 123
 
 
-
-# # ----------------------------------------------------------------------------
-# # -------------------MODELO HOBERENA: KERNEL GAUSSIARRA-----------------------
-# # ----------------------------------------------------------------------------
+# # -------------------
+# # MODELO HOBERENA: 
+# # KERNEL GAUSSIARRA
+# # -------------------
 
 # # Modeloa sortu:
 modelo_gauss = Nire_SGD_kernelekin(koeficient=10**(-3), kernel = "kernel gaussiarra", sigma = 10)
@@ -64,9 +65,10 @@ pickle.dump(modelo_gauss_info, open(os.path.join(bide_orokorra, "Entrenatutako_m
 
 
 
-# # ----------------------------------------------------------------------------
-# # ------------------MODELO HOBERENA: KERNEL POLINOMIALA-----------------------
-# # ----------------------------------------------------------------------------
+# # -------------------
+# # MODELO HOBERENA: 
+# # KERNEL POLINOMIALA
+# # -------------------
 
 # # Modeloa sortu:
 modelo_poly = Nire_SGD_kernelekin(koeficient=10**(3), kernel = "kernel polinomiala", deg = 3)

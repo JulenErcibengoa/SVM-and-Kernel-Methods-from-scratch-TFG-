@@ -15,9 +15,10 @@ import pickle
 import random
 from sklearn.metrics import confusion_matrix
 
-# # ----------------------------------------------------------------------------
-# # -------------------------DATU BASEA INPORTATU-------------------------------
-# # ----------------------------------------------------------------------------
+# # -------------------------------
+# # ------DATU BASEA INPORTATU-----
+# # -------------------------------
+
 mnist_test_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_test.csv")
 mnist_train_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_train.csv")
 
@@ -35,9 +36,10 @@ X_test = X_test / 255
 
 
 
-# # ----------------------------------------------------------------------------
-# # --------------------NIRE MODELOA KERNEL GAUSSIARRA--------------------------
-# # ----------------------------------------------------------------------------
+# # --------------------
+# # NIRE MODELOA KERNEL 
+# #    GAUSSIARRA
+# # --------------------
 
 # # Modeloa inportatu
 Nire_gauss = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Nire_modelo_hoberena_gauss.pkl"),"rb"))
@@ -100,9 +102,10 @@ plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Nire_gauss_gaizki_klasifikat
 
 
 
-# # ----------------------------------------------------------------------------
-# # --------------------NIRE MODELOA KERNEL POLINOMIALA-------------------------
-# # ----------------------------------------------------------------------------
+# # --------------------
+# # NIRE MODELOA KERNEL 
+# #    POLINOMIALA
+# # --------------------
 
 # # Modeloa inportatu
 Nire_poly = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Nire_modelo_hoberena_poly.pkl"),"rb"))
@@ -166,9 +169,10 @@ plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Nire_poly_gaizki_klasifikatu
 
 
 
-# # ----------------------------------------------------------------------------
-# # --------------------SCIKIT MODELOA KERNEL GAUSSIARRA--------------------------
-# # ----------------------------------------------------------------------------
+# # --------------------
+# # SCIKIT MODELOA KERNEL 
+# #    GAUSSIARRA
+# # --------------------
 
 # # Modeloa inportatu
 Scikit_gauss = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_gauss.pkl"),"rb"))
@@ -231,10 +235,10 @@ plt.savefig(os.path.join(oraingo_bidea, "Irudiak", "Scikit_gauss_gaizki_klasifik
 
 
 
-
-# # # ----------------------------------------------------------------------------
-# # # --------------------SCIKIT MODELOA KERNEL POLINOMIALA-------------------------
-# # # ----------------------------------------------------------------------------
+# # --------------------
+# # SCIKI MODELOA KERNEL 
+# #    POLINOMIALA
+# # --------------------
 
 # # Modeloa inportatu
 Scikit_poly = pickle.load(open(os.path.join(bide_orokorra,"Entrenatutako_modeloak","Scikit_modelo_hoberena_poly.pkl"),"rb"))

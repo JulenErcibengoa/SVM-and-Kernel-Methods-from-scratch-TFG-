@@ -11,9 +11,9 @@ import time
 import pickle
 import random
 
-# # ----------------------------------------------------------------------------
-# # -------------------------DATU BASEA INPORTATU-------------------------------
-# # ----------------------------------------------------------------------------
+# # -------------------------------
+# # ------DATU BASEA INPORTATU-----
+# # -------------------------------
 mnist_test_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_test.csv")
 mnist_train_bidea = os.path.join(bide_orokorra, "Datu_basea\mnist_train.csv")
 
@@ -30,9 +30,10 @@ X_test = X_test / 255
 
 
 
-# # ----------------------------------------------------------------------------
-# # -------------------MODELO HOBERENA: KERNEL GAUSSIARRA-----------------------
-# # ----------------------------------------------------------------------------
+# # -------------------
+# # MODELO HOBERENA: 
+# # KERNEL GAUSSIARRA
+# # -------------------
 
 # # Modeloa sortu:
 modelo_gauss = SVC(C = 10, kernel = "rbf", gamma = 10**(-2))
@@ -56,12 +57,10 @@ pickle.dump(modelo_gauss_info, open(os.path.join(bide_orokorra, "Entrenatutako_m
 
 
 
-
-
-
-# # ----------------------------------------------------------------------------
-# # ------------------MODELO HOBERENA: KERNEL POLINOMIALA-----------------------
-# # ----------------------------------------------------------------------------
+# # -------------------
+# # MODELO HOBERENA: 
+# # KERNEL POLINOMIALA
+# # -------------------
 
 # # Modeloa sortu:
 modelo_poly = SVC(C=10, kernel = "poly", degree = 6, coef0 =1)
