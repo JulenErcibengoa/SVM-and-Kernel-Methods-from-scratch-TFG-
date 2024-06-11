@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-# Definir la función z en términos de x y y
+
 def f(x1,x2):
     return 1.25 *(x1 + 5)**2 + (x2-8)**2
 
@@ -26,46 +26,65 @@ def twoD_GD(f, df, x0, iter = 100, mu = 0.1):
         W[t+1] = W[t]- mu * df(W[t])
     return 1/iter * sum(W), W
 
-# Generar datos para x, y
+
 x = np.linspace(-50, 50, 100)
 y = np.linspace(-50, 50, 100)
 x, y = np.meshgrid(x, y)
 
-# Calcular los valores de z
+
 z = f(x, y)
 
-# Crear la figura
+
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
 
-# Graficar el contorno de la función
+
 
 altuera = np.array([10 for i in range(100)])
 contorno = ax.plot_surface(x, y, z, cmap = plt.cm.cividis, alpha = 0.5)
 puntos = ax.scatter(W[:,0], W[:,1], f(W[:,0],W[:,1]) + altuera, c = 'r', s = 10,alpha = 1)
 
-# Etiquetas de los ejes
+
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 
-# Mostrar el gráfico
+
 plt.show()
 
 
 
 
 
-# En 2d
+# 2D
 
-x = np.linspace(-3,3,100)
+x = np.linspace(-4,4,100)
 
 def funct(x):
-    return x^3
+    return x**2
 
 def df(x):
-    return 3*x^2
+    return 2*x
 
 y = funct(x)
+
+def gd(f,df,x0,nu,T):
+    v = np.zeros(T+1)
+    v[0] = x0
+    for i in range(1, T+1):
+        print(i)
+        v[i] = v[i-1] - nu * df(v[i-1])
+    return v, v[-1]
+
+v, minim = gd(funct, df, -4, 0.1, 30)
+print(v)
+print(minim)
+
+plt.plot(x,y)
+plt.scatter(v, funct(v),color = "red")
+plt.show()
+        
+
+
 
 
