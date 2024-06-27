@@ -29,3 +29,15 @@ for i in range(2):
 plt.tight_layout(pad = 0.2)
 plt.show()
 
+
+adib = np.array(X_entrenamendu.iloc[0, :])
+adib = np.reshape(adib, (28, 28))
+fig, ax = plt.subplots(figsize=(8, 8))
+cax = ax.imshow(adib, cmap="gray_r")
+for i in range(adib.shape[0]):
+    for j in range(adib.shape[1]):
+        text = ax.text(j, i, adib[i, j],
+                       ha="center", va="center", color="w" if adib[i, j] > 50 else "black",size = 7)
+ax.set_xticks([])
+ax.set_yticks([])
+plt.show()
